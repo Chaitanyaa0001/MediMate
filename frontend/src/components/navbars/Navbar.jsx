@@ -34,10 +34,12 @@ const Navbar = () => {
 
           {/* Desktop Buttons */}
           <div className='hidden sm:flex gap-4'>
-            <Link to ='/' >
+            <Link to ='/signup' >
                 <button className='text-blue-700 px-7 py-2 rounded-[5px]'>Signup</button>
             </Link>
-            <button className='bg-red-700 text-white px-7 py-2 rounded-[5px]'>Signin</button>
+            <Link to= '/signin'>
+                <button className='bg-red-700 text-white px-7 py-2 rounded-[5px]'>Signin</button>
+            </Link>
           </div>
         </div>
       </div>

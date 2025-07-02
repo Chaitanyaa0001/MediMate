@@ -29,28 +29,26 @@ const Quickactions = () => {
   ];
 
   return (
-    <>
+    <div className="p-7 lg:w-[85%] mx-auto">
+      <h2 className="text-2xl font-bold mb-4 text-blue-700 sm:text-3xl lg:text-4xl">
+        🚀 Quick Actions
+      </h2>
 
-    <div className="p-7 lg:w-[85%] mx-auto  lg:">
-        <h2 className="text-2xl font-bold mb-4 text-blue-700 sm:text-3xl lg:text-4xl">Quick Actions</h2>
-
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6  border-gray-300 p-7 bg-gray-50  rounded-xl">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 bg-gray-50 p-6 rounded-xl border-2 border-gray-300">
         {actions.map((action, index) => (
           <div
             key={index}
             onClick={() => navigate(action.path)}
-            className="cursor-pointer bg-white  shadow-md shadow-gray-700 rounded-xl p-6 flex flex-col items-center justify-center hover:shadow-lg hover:scale-[1.02] transition-all duration-300 w-full lg:min-w-[200px] lg:h-[200px]"
+            className="cursor-pointer bg-white shadow-sm  border-2 border-gray-300 rounded-xl p-6 flex flex-col items-center justify-center hover:shadow-md hover:scale-[1.01] transition-all duration-300"
           >
             {action.icon}
-            <p className="mt-4 text-center font-medium text-gray-800 text-base lg:text-xl">
+            <p className="mt-4 text-center text-gray-800 font-semibold text-lg lg:text-xl">
               {action.title}
             </p>
           </div>
         ))}
       </div>
     </div>
-    </>
   );
 };
 

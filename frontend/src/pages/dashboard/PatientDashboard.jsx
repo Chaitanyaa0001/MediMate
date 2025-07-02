@@ -1,8 +1,7 @@
 import React from 'react';
-import Navbar from '../../components/navbars/Navbar';
 import Googlefitdata from '../../components/dashboardcomponents/Googlefitdata';
 import Quickactions from '../../components/dashboardcomponents/Quickactions';
-import Blogpost from '../../components/dashboardcomponents/Dashblogs';
+import Blog from '../blogs/Blog';
 import DashNavbar from '../../components/navbars/DashNavbar';
 
 
@@ -15,7 +14,7 @@ const PatientDashboard = () => {
       <DashNavbar/>
       <Googlefitdata/>
       <Quickactions/>
-      <Blogpost/>
+      <Blog role= 'patient'/>
     </>
   );
 };

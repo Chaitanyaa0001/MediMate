@@ -25,7 +25,7 @@ const Login = () => {
     if(logindata.role === 'doctor'){
       navigate('/doctor/dashboard')
     }else{
-      navigate('/')
+      navigate('/patient/dashboard')
     }
     console.log('Login Submitted:', logindata);
   };
@@ -39,7 +39,7 @@ const Login = () => {
     </div>
       <form
         onSubmit={handleSubmit}
-className="flex flex-col bg-gray-100 justify-between w-[70%]  h-[50%] sm:w-[50%] sm:h-[62%] lg:w-[30%] lg:h-[400px] p-5 rounded-[8px] shadow-lg shadow-black"
+        className="flex flex-col bg-gray-100 justify-between w-[70%]  h-[60%] sm:w-[50%] sm:h-[62%] lg:w-[30%] lg:h-[400px] p-5 rounded-[8px] shadow-lg shadow-black"
       >
         <h1 className="text-2xl text-red-600 font-bold text-shadow-red-600">Login</h1>
 

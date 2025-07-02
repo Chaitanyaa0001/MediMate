@@ -1,20 +1,28 @@
 import React, { useState } from 'react';
 import logo from '../../assets/logo.png';
-import { Link, useLocation } from 'react-router-dom';
-import { RxHamburgerMenu } from "react-icons/rx";
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { RxHamburgerMenu } from 'react-icons/rx';
 
 const DashNavbar = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [menuitems, setmenuitems] = useState(false);
 
   const toggle = () => setmenuitems(!menuitems);
 
+  const role = localStorage.getItem('medimate_role'); // 'doctor' or 'patient'
+
+  const handleLogout = () => {
+    localStorage.removeItem('medimate_role');
+    navigate('/signin');
+  };
+
   const navItems = [
-    { name: 'dashboard', path: '/dashboard' },
+    { name: 'Dashboard', path: `/${role}/dashboard` },
     { name: 'Chats', path: '/chats' },
-    { name: 'appointments', path: '/appointments' },
-    { name: 'blogs', path: '/blogs' },
-    { name: 'settings', path: '/settings' },
+    { name: 'Appointments', path: `/${role}/appointments` },
+    { name: 'Blogs', path: `/${role}/blogs` },
+    { name: 'Settings', path: '/settings' },
   ];
 
   return (
@@ -46,7 +54,10 @@ const DashNavbar = () => {
 
         {/* Logout button on large screen */}
         <div className="hidden lg:block">
-          <button className="bg-black text-white px-4 py-2 rounded-md hover:bg-gray-800 transition">
+          <button
+            onClick={handleLogout}
+            className="bg-black text-white px-4 py-2 rounded-md hover:bg-gray-800 transition"
+          >
             Logout
           </button>
         </div>
@@ -79,7 +90,7 @@ const DashNavbar = () => {
             ))}
 
             <button
-              onClick={() => setmenuitems(false)}
+              onClick={handleLogout}
               className="mt-2 bg-black text-white px-4 py-2 rounded-md hover:bg-gray-800 transition"
             >
               Logout

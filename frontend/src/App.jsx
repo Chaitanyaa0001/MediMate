@@ -34,9 +34,9 @@ const App = () => {
       {/* Patient Routes */}
       {role === 'patient' && (
         <>
-          <Route path="/dashboard" element={<PatientDashboard />} />
-          <Route path="/appointments" element={<BookAppointment />} />
-          <Route path="/blogs" element={<Blog />} />
+          <Route path="/patient/dashboard" element={<PatientDashboard />} />
+          <Route path="/patient/appointments" element={<BookAppointment />} />
+          <Route path="/patient/blogs" element={<Blog />} />
         </>
       )}
 

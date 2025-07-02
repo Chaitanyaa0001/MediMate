@@ -11,7 +11,7 @@ const DoctorDashboard = () => {
       <DashNavbar/>
       <Googlefitdata/>
       <Quickactions/>
-      <Blogpost/>
+      <Blogpost role= "doctor"/>
     </div>
   )
 }
