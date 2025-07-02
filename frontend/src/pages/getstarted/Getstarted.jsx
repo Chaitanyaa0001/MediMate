@@ -1,5 +1,4 @@
 import React from 'react';
-import Navbar from '../../components/navbars/Navbarr';
 import { FiHeart } from 'react-icons/fi';
 import logo from '../../assets/logo.png';
 import { GiArtificialIntelligence } from 'react-icons/gi';
@@ -7,6 +6,7 @@ import { FaRegNewspaper } from 'react-icons/fa';
 import { MdIntegrationInstructions,MdDashboard} from 'react-icons/md';
 import Freetrial from '../../components/getstarted/Freetrial';
 import Footer from '../../components/Footer';
+import Navbar from '../../components/navbars/Navbar';
 
 
 const Getstarted = () => {

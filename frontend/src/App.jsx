@@ -16,6 +16,7 @@ import DoctorDashboard from './pages/dashboard/DoctorDashboard';
 import ManageAppointments from './pages/appoitnments/ManageAppointment';
 import Postblog from './pages/blogs/Postblog';
 
+
 // Common
 import Chats from './pages/chats/Chats';
 import Settings from './pages/settings/Settings';

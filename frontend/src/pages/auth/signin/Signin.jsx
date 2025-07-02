@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import logo from '../../../assets/logo.png'
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
+  const navigate = useNavigate();
   const [logindata, setlogindata] = useState({
     email: '',
-    password: ''
+    password: '',
+    role: ''
   });
 
   const handleChange = (e) => {
@@ -17,6 +20,13 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    localStorage.setItem('medimate_role', logindata.role);
+    if(logindata.role === 'doctor'){
+      navigate('/doctor/dashboard')
+    }else{
+      navigate('/')
+    }
     console.log('Login Submitted:', logindata);
   };
 
@@ -55,6 +65,20 @@ className="flex flex-col bg-gray-100 justify-between w-[70%]  h-[50%] sm:w-[50%]
             onChange={handleChange}
             className="w-full mt-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
+        </div>
+        <div className="w-full">
+          <label className="text-sm text-gray-600">Login as</label>
+          <select
+            name="role"
+            value={logindata.role}
+            onChange={handleChange}
+            required
+            className="w-full mt-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="">Select role</option>
+            <option value="patient">Patient</option>
+            <option value="doctor">Doctor</option>
+          </select>
         </div>
 
         <button

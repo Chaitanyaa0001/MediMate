@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import logo from '../../assets/logo.png';
 import { RxHamburgerMenu } from "react-icons/rx";
+import { Link } from 'react-router-dom';
+
 
 const Navbar = () => {
   const [menuopen, setmenuopen] = useState(false);

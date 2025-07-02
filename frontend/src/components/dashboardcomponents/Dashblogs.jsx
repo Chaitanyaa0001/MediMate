@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-const Blogpost = () => {
+const Dashblogs = () => {
   const [blogs, setBlogs] = useState([]);
 
   // Simulate fetching from backend
@@ -49,4 +49,4 @@ const Blogpost = () => {
   );
 };
 
-export default Blogpost;
+export default Dashblogs;

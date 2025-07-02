@@ -1,11 +1,10 @@
 import React from 'react'
-import DashaNavbar from '../../components/navbars/DashNavbar'
-
+import DashNavbar from '../../components/navbars/DashNavbar'
 
 const Blog = () => {
   return (
     <div>
-        <DashaNavbar/>     
+        <DashNavbar/>     
         Blog</div>
   )
 }
