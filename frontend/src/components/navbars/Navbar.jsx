@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import logo from '../assets/logo.png';
+import logo from '../../assets/logo.png';
 import { RxHamburgerMenu } from "react-icons/rx";
 
 const Navbar = () => {
@@ -32,7 +32,9 @@ const Navbar = () => {
 
           {/* Desktop Buttons */}
           <div className='hidden sm:flex gap-4'>
-            <button className='text-blue-700 px-7 py-2 rounded-[5px]'>Signup</button>
+            <Link to ='/' >
+                <button className='text-blue-700 px-7 py-2 rounded-[5px]'>Signup</button>
+            </Link>
             <button className='bg-red-700 text-white px-7 py-2 rounded-[5px]'>Signin</button>
           </div>
         </div>
