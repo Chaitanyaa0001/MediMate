@@ -23,16 +23,16 @@ const Signup = () => {
   };
 
   return (
-    <div className='h-screen w-full flex flex-col justify-center items-center'>
-      <div className='flex flex-col justify-center items-center gap-1 mb-8'>
-        <img src={logo} alt="logo" className='w-[100px] sm:w-[130px] lg:w-[150px]' />
+    <div className='h-screen w-full flex flex-col justify-center items-center '>
+      <div className='flex flex-col justify-center items-center gap-1 mb-2   '>
+        <img src={logo} alt="logo" className='w-[70px] sm:w-[100px] lg:w-[150px]' />
         <h1 className='text-3xl text-red-600 mb-2 lg:text-4xl'>Join MediMate</h1>
         <h2 className='text-xl opacity-55'>Create your free account</h2>
       </div>
 
       <form
         onSubmit={handleSubmit}
-        className="flex flex-col bg-gray-100 justify-between w-[70%] h-[400px] sm:w-[50%] sm:h-[500px] lg:w-[30%] lg:h-[500px] p-5 rounded-[8px] shadow-lg shadow-black"
+        className="flex flex-col bg-gray-100 justify-between w-[70%] m-3 h-[500px] sm:w-[50%] sm:h-[500px] lg:w-[30%] lg:h-[500px] p-5 rounded-[8px] shadow-lg shadow-black"
       >
         <h1 className="text-2xl text-red-600 font-bold">Sign Up</h1>
 
@@ -93,8 +93,8 @@ const Signup = () => {
 
         <span className="text-sm text-center mt-2">
           Already have an account?{' '}
-          <Link to="/login" className="text-blue-600 underline">
-            Login
+          <Link to="/signin" className="text-blue-600 underline">
+            Signin
           </Link>
         </span>
       </form>
