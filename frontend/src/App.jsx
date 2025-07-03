@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import { Routes, Route } from 'react-router-dom';
 
 import Getstarted from './pages/getstarted/Getstarted';
-import Signin from './pages/auth/signin/Signin'
+import Signin from './pages/auth/signin/Signin';
 import Signup from './pages/auth/signup/Signup';
 
 // Patient Pages
@@ -16,14 +16,21 @@ import DoctorDashboard from './pages/dashboard/DoctorDashboard';
 import ManageAppointments from './pages/appoitnments/ManageAppointment';
 import Postblog from './pages/blogs/Postblog';
 
-
 // Common
 import Chats from './pages/chats/Chats';
 import Settings from './pages/settings/Settings';
 
-
 const App = () => {
-  const role = localStorage.getItem('medimate_role'); // get role after login
+  const [role, setRole] = useState(null);
+
+  useEffect(() => {
+    const storedRole = localStorage.getItem('medimate_role');
+    if (storedRole) {
+      setRole(storedRole);
+    }
+  }, []);
+
+  if (role === null) return <div>Loading...</div>; // or redirect to signin
 
   return (
     <Routes>

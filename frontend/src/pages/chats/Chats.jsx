@@ -35,6 +35,11 @@ const Chats = () => {
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
+            onKeyDown={(e)=>{
+              if(e.key === 'Enter'){
+                handleAsk();
+              }
+            }}
             placeholder="e.g., I have chest pain and short breath"
             className="  w-[100%] sm:flex-1  lg:flex-1 px-4 py-3 rounded-full border bg-white border-gray-300 focus:ring-2 focus:ring-red-500 focus:outline-none "
           />
@@ -60,7 +65,7 @@ const Chats = () => {
         </div>
 
         {/* Chat History */}
-        <div className= "shadow rounded-lg p-6">
+        <div className= "space-y-3 mt-6">
           {chats.length === 0 && (
             <p className="text-gray-600 text-center">No conversation yet. Ask something!</p>
           )}
@@ -69,8 +74,7 @@ const Chats = () => {
               key={idx}
               className={`flex ${msg.from === 'user' ? 'justify-end' : 'justify-start'}`}
             >
-              <div
-                className={`px-4 py-2 rounded-lg max-w-xs ${
+              <div className={`px-4 py-2 rounded-lg max-w-xs ${
                   msg.from === 'user'
                     ? 'bg-red-600 text-white rounded-br-none'
                     : 'bg-gray-100 text-gray-800 rounded-bl-none'
