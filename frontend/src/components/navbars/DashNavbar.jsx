@@ -23,6 +23,7 @@ const DashNavbar = () => {
       ? [{ name: 'Register', path: `/${role}/register` }]
       : []),
     { name: 'Dashboard', path: `/${role}/dashboard` },
+    {name:'Drug Info (FDA)', path : '/fda'},
     { name: 'Chats', path: '/chats' },
     { name: 'Appointments', path: `/${role}/appointments` },
     { name: 'Blogs', path: `/${role}/blogs` },

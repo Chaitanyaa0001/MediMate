@@ -22,6 +22,8 @@ import Register from './pages/register/Register';
 // Common
 import Chats from './pages/chats/Chats';
 import Settings from './pages/settings/Settings';
+import FDA from './pages/fda/FDA';
+
 
 
 const App = () => {
@@ -32,6 +34,7 @@ const App = () => {
       <Route path="/" element={<Getstarted />} />
       <Route path="/signin" element={<Signin />} />
       <Route path="/signup" element={<Signup />} />
+      <Route path='/fda' element= {<FDA/>}></Route>
 
       {/* Patient Routes */}
       {role === 'patient' && (
