@@ -23,6 +23,7 @@ const DashNavbar = () => {
     { name: 'Appointments', path: `/${role}/appointments` },
     { name: 'Blogs', path: `/${role}/blogs` },
     { name: 'Settings', path: '/settings' },
+    {name:"Register!" , path: `/${role}/register`}
   ];
 
   return (

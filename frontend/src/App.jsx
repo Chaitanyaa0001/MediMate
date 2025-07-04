@@ -15,6 +15,8 @@ import Blog from './pages/blogs/Blog';
 import DoctorDashboard from './pages/dashboard/DoctorDashboard';
 import ManageAppointments from './pages/appoitnments/ManageAppointment';
 import Postblog from './pages/blogs/Postblog';
+import Register from './pages/register/Register';
+
 
 
 // Common
@@ -46,6 +48,7 @@ const App = () => {
           <Route path="/doctor/dashboard" element={<DoctorDashboard />} />
           <Route path="/doctor/appointments" element={<ManageAppointments />} />
           <Route path="/doctor/blogs" element={<Postblog />} />
+          <Route path='/doctor/register' element={<Register/>}></Route>
         </>
       )}
 
