@@ -17,13 +17,16 @@ const DashNavbar = () => {
     navigate('/signin');
   };
 
+  // Base navigation items (common to both)
   const navItems = [
+    ...(role === 'doctor'
+      ? [{ name: 'Register', path: `/${role}/register` }]
+      : []),
     { name: 'Dashboard', path: `/${role}/dashboard` },
     { name: 'Chats', path: '/chats' },
     { name: 'Appointments', path: `/${role}/appointments` },
     { name: 'Blogs', path: `/${role}/blogs` },
     { name: 'Settings', path: '/settings' },
-    {name:"Register!" , path: `/${role}/register`}
   ];
 
   return (
@@ -89,7 +92,6 @@ const DashNavbar = () => {
                 {item.name}
               </Link>
             ))}
-
             <button
               onClick={handleLogout}
               className="mt-2 bg-black text-white px-4 py-2 rounded-md hover:bg-gray-800 transition"

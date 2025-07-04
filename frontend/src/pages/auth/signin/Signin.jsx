@@ -23,7 +23,7 @@ const Login = () => {
 
     localStorage.setItem('medimate_role', logindata.role);
     if(logindata.role === 'doctor'){
-      navigate('/doctor/dashboard')
+      navigate('/doctor/register')
     }else{
       navigate('/patient/dashboard')
     }
