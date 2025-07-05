@@ -7,7 +7,7 @@ const JWT_SECRET =  process.env.JWT_SECRET;
 const checkauth = async (req,res,next) =>{
     try {
         let token ;
-        if(req.cookies && req.cokkies.token){
+        if(req.cookies && req.cookies.token){
             token = req.cookies.token;
         }
         const decoded = jwt.verify(token,JWT_SECRET);

@@ -3,16 +3,23 @@ const mongoose = require('mongoose');
 const cors = require("cors");
 require('dotenv').config();
 
+const authorutes = require('./routes/auth.route')
+
 const connectDB = require('./config/database');
+const cookieParser = require('cookie-parser');
 
 
 
 const app =  express();
 
 connectDB();
+require("./utils/cloudinary")
 
+app.use(cookieParser());
 app.use(cors());
 app.use(express.json());
+
+app.use('/api/auth', authorutes);
 
 
 

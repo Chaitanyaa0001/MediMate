@@ -68,7 +68,7 @@ const FDA = () => {
               className="outline-none w-full"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-             
+                
             />
           </div>
           <button

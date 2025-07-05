@@ -77,7 +77,7 @@ const Register = () => {
                 <h2 className='italic font-semibold  sm:text-[1rem] '>Gender</h2>
                 <input type="text" name="gender" value={registerdata.gender} onChange={handleChange} placeholder="Gender" required className='w-full p-1.5  mb-4 border-1 border-gray-400 focus:outline-none focus:border-red-500 focus:border-2 rounded-[6px]' />
               </div>
-            </div>
+            </div> 
 
             <div className='bg-white p-2 rounded-[6px] lg:p-10 border-2 border-red-600 flex flex-col'>
               <h1 className='text-xl text-red-500 italic font-semibold sm:text-2xl lg:text-3xl'>Professional Information</h1>
@@ -103,7 +103,7 @@ const Register = () => {
               <h2 className='italic font-semibold  sm:text-[1rem] '>Availablity</h2>
               <input type="text" name="timeings" value={registerdata.timeings} onChange={handleChange} placeholder="Available Timings" required  className='w-full p-1.5 border-1 border-gray-400 mb-4 focus:outline-none focus:border-red-500 focus:border-2 rounded-[6px]' />
             </div>
-            <button type="submit" className='w-[30%] border-2 py-1 bg-red-600 text-white rounded-[6px] hover:bg-red-700 cursor-pointer sm:w-[25%] sm:py-2'>Submit</button>
+          ------  <button type="submit" className='w-[30%] border-2 py-1 bg-red-600 text-white rounded-[6px] hover:bg-red-700 cursor-pointer sm:w-[25%] sm:py-2'>Submit</button>
           </div>
         </form>
       </div>

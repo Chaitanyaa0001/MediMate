@@ -8,9 +8,9 @@ const Settings = () => {
     email: '',
   });
   const [passwords, setPasswords] = useState({
-    currentPassword: '',
-    newPassword: '',
-    confirmPassword: '',
+    oldpassword: '',
+    newpassword: '',
+    confirmpassword: '',
   });
   const [showDeleteInput, setShowDeleteInput] = useState(false);
   const [deleteConfirmText, setDeleteConfirmText] = useState('');
@@ -77,11 +77,11 @@ const Settings = () => {
 
           <form onSubmit={SubmitPassword} className='flex justify-center flex-col items-start gap-1'>
             <h1 className='italic font-medium'>Current Password</h1>
-            <input type="password" name="currentPassword" value={passwords.currentPassword} onChange={Changepassword} className='border border-gray-400 w-full p-1.5 rounded-[5px] focus:outline-none focus:border-2 focus:border-red-600'/>
+            <input type="password" name="oldPassword" value={passwords.oldpassword} onChange={Changepassword} className='border border-gray-400 w-full p-1.5 rounded-[5px] focus:outline-none focus:border-2 focus:border-red-600'/>
             <h1 className='italic font-medium'>New Password</h1>
-            <input type="password" name="newPassword" value={passwords.newPassword} onChange={Changepassword} className='border border-gray-400 w-full p-1.5 rounded-[5px] focus:outline-none focus:border-2 focus:border-red-600'/>
+            <input type="password" name="newPassword" value={passwords.newpassword} onChange={Changepassword} className='border border-gray-400 w-full p-1.5 rounded-[5px] focus:outline-none focus:border-2 focus:border-red-600'/>
             <h1 className='italic font-medium'>Confirm Password</h1>
-            <input type="password" name="confirmPassword" value={passwords.confirmPassword} onChange={Changepassword}className='border border-gray-400 w-full p-1.5 rounded-[5px] focus:outline-none focus:border-2 focus:border-red-600'/>
+            <input type="password" name="confirmPassword" value={passwords.confirmpassword} onChange={Changepassword}className='border border-gray-400 w-full p-1.5 rounded-[5px] focus:outline-none focus:border-2 focus:border-red-600'/>
             <button className='bg-red-600 py-1 px-2 rounded-[6px] hover:bg-red-700 text-white mt-5 lg:px-7 sm:px-6 sm:py-2 lg:py-3'>Change Password</button>
           </form>
         </div>
