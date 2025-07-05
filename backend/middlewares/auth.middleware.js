@@ -5,8 +5,11 @@ const JWT_SECRET =  process.env.JWT_SECRET;
 
 
 const checkauth = async (req,res,next) =>{
-    const token = req.cokkie.token;
     try {
+        let token ;
+        if(req.cookies && req.cokkies.token){
+            token = req.cookies.token;
+        }
         const decoded = jwt.verify(token,JWT_SECRET);
         const user = await User.findById(decoded.id).select('-password');
         if(!user){
