@@ -6,6 +6,7 @@ require('dotenv').config();
 const authorutes = require('./routes/auth.route');
 const userroutes = require('./routes/user.route');
 const doctorroutes = require('./routes/doctor.route');
+const appointmentsroutes = require('./routes/appointments.route');
 
 const connectDB = require('./config/database');
 const cookieParser = require('cookie-parser');
@@ -26,7 +27,8 @@ app.use(express.urlencoded({ extended: true })); // Optional: if using URL-encod
 // routes 
 app.use('/api/auth', authorutes);
 app.use('/api/user',userroutes);
-app.use('/api/doctors',doctorroutes);
+app.use('/api/doctors',doctorroutes);   
+app.use('/api/appointments',appointmentsroutes);
 
 
 const PORT = process.env.PORT || 6900;
