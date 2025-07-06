@@ -7,6 +7,7 @@ const authorutes = require('./routes/auth.route');
 const userroutes = require('./routes/user.route');
 const doctorroutes = require('./routes/doctor.route');
 const appointmentsroutes = require('./routes/appointments.route');
+const blogroutes = require('./routes/blog.route');
 
 const connectDB = require('./config/database');
 const cookieParser = require('cookie-parser');
@@ -29,6 +30,8 @@ app.use('/api/auth', authorutes);
 app.use('/api/user',userroutes);
 app.use('/api/doctors',doctorroutes);   
 app.use('/api/appointments',appointmentsroutes);
+app.use('/api/blogs',blogroutes);
+
 
 
 const PORT = process.env.PORT || 6900;
