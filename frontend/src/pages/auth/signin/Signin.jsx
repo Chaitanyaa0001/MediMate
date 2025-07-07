@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
 import logo from '../../../assets/logo.png';
 import { Link, useNavigate } from 'react-router-dom';
+import { usesignin } from '../../../hooks/authhooks/useSignin';
 
 const Signin = () => {
   const navigate = useNavigate();
+  const { signin, loading, error } = usesignin();
+
   const [logindata, setlogindata] = useState({
     email: '',
     password: '',
-    role: 'patient' // default role
+    role: 'patient'
   });
 
   const handleChange = (e) => {
@@ -18,15 +21,18 @@ const Signin = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    localStorage.setItem('medimate_role', logindata.role);
-    if (logindata.role === 'doctor') {
-      navigate('/doctor/register');
-    } else {
-      navigate('/patient/dashboard');
-    }
-    console.log('Login Submitted:', logindata);
+    const result = await signin(logindata);
+
+    if (result) {
+  if (result.user.role === 'doctor') {
+    navigate('/doctor/register');
+  } else {
+    navigate('/patient/dashboard');
+  }
+}
+
   };
 
   return (
@@ -42,6 +48,10 @@ const Signin = () => {
         className="flex flex-col bg-gray-100 justify-between w-[70%] h-fit sm:w-[50%] lg:w-[30%] p-5 rounded-[8px] shadow-lg shadow-black gap-4"
       >
         <h1 className="text-2xl text-red-600 font-bold">Login</h1>
+
+        {/* Error message */}
+        {error && <p className="text-red-600 text-sm">{error}</p>}
+        {loading && <p className="text-blue-600 text-sm">Logging in...</p>}
 
         <div className="w-full">
           <label className="text-sm text-gray-600">Email</label>
@@ -67,7 +77,6 @@ const Signin = () => {
           />
         </div>
 
-        {/* ✅ Role selection via radio buttons */}
         <div className="w-full">
           <label className="text-sm text-gray-600">Login as</label>
           <div className="flex gap-6 mt-2">

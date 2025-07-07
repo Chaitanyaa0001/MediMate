@@ -64,7 +64,7 @@
                 sameSite: "None",
                 path: '/'
             });
-            return res.status(201).json({loggedinuser,token});
+            return res.status(201).json({ user :loggedinuser,token});
 
         } catch (error) {
             console.error("signin error in server",error);

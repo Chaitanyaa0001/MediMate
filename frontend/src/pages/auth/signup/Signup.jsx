@@ -1,8 +1,14 @@
 import React, { useState } from 'react';
 import logo from '../../../assets/logo.png';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import useSignup from '../../../hooks/authhooks/useSignup';
+
 
 const Signup = () => {
+  const navigate = useNavigate();
+  const {signup} =  useSignup();
+
   const [signupData, setSignupData] = useState({
     username: '',
     email: '',
@@ -19,10 +25,16 @@ const Signup = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Signup Submitted:', signupData);
-    // You can integrate API call here later
+    try {
+      const result = await signup(signupData);
+      if(result){
+        navigate('/signin')
+      }
+    } catch (error) {
+      console.error("error in signuppage",error); 
+    }
   };
 
   return (
