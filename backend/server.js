@@ -8,6 +8,7 @@ const userroutes = require('./routes/user.route');
 const doctorroutes = require('./routes/doctor.route');
 const appointmentsroutes = require('./routes/appointments.route');
 const blogroutes = require('./routes/blog.route');
+const geminiroutes = require('./routes/gemini.route')
 
 const connectDB = require('./config/database');
 const cookieParser = require('cookie-parser');
@@ -31,6 +32,7 @@ app.use('/api/user',userroutes);
 app.use('/api/doctors',doctorroutes);   
 app.use('/api/appointments',appointmentsroutes);
 app.use('/api/blogs',blogroutes);
+app.use('/api/chat',geminiroutes);
 
 
 
