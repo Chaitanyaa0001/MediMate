@@ -24,7 +24,6 @@ const Userschema = new mongoose.Schema({
    
 },{timestamps:true});
 
-//  allowing access the user to access tge both role with one mail id 
 Userschema.index({email: 1,role :1}, {unique:true});
 
 module.exports = mongoose.model('User',Userschema);
