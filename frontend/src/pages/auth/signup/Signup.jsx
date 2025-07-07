@@ -7,24 +7,27 @@ const Signup = () => {
     username: '',
     email: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    role: 'patient' // default selection
   });
 
   const handleChange = (e) => {
-    setSignupData({
-      ...signupData,
-      [e.target.name]: e.target.value
-    });
+    const { name, value } = e.target;
+    setSignupData((prev) => ({
+      ...prev,
+      [name]: value
+    }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('Signup Submitted:', signupData);
+    // You can integrate API call here later
   };
 
   return (
-    <div className='h-screen w-full flex flex-col justify-center items-center '>
-      <div className='flex flex-col justify-center items-center gap-1 mb-2   '>
+    <div className='h-screen w-full flex flex-col justify-center items-center'>
+      <div className='flex flex-col justify-center items-center gap-1 mb-2'>
         <img src={logo} alt="logo" className='w-[70px] sm:w-[100px] lg:w-[150px]' />
         <h1 className='text-3xl text-red-600 mb-2 lg:text-4xl'>Join MediMate</h1>
         <h2 className='text-xl opacity-55'>Create your free account</h2>
@@ -32,7 +35,7 @@ const Signup = () => {
 
       <form
         onSubmit={handleSubmit}
-        className="flex flex-col bg-gray-100 justify-between w-[70%] m-3 h-[500px] sm:w-[50%] sm:h-[500px] lg:w-[30%] lg:h-[500px] p-5 rounded-[8px] shadow-lg shadow-black"
+        className="flex flex-col bg-gray-100 justify-between w-[70%] m-3 h-fit sm:w-[50%] lg:w-[30%] p-5 rounded-[8px] shadow-lg shadow-black gap-4"
       >
         <h1 className="text-2xl text-red-600 font-bold">Sign Up</h1>
 
@@ -82,6 +85,33 @@ const Signup = () => {
             onChange={handleChange}
             className="w-full mt-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
+        </div>
+
+        {/* ✅ Radio Button for Role */}
+        <div className="w-full">
+          <label className="text-sm text-gray-600">Role</label>
+          <div className="flex gap-6 mt-2">
+            <label className="flex items-center gap-2">
+              <input
+                type="radio"
+                name="role"
+                value="patient"
+                checked={signupData.role === 'patient'}
+                onChange={handleChange}
+              />
+              <span>Patient</span>
+            </label>
+            <label className="flex items-center gap-2">
+              <input
+                type="radio"
+                name="role"
+                value="doctor"
+                checked={signupData.role === 'doctor'}
+                onChange={handleChange}
+              />
+              <span>Doctor</span>
+            </label>
+          </div>
         </div>
 
         <button

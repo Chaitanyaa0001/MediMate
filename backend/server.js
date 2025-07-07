@@ -9,6 +9,7 @@ const doctorroutes = require('./routes/doctor.route');
 const appointmentsroutes = require('./routes/appointments.route');
 const blogroutes = require('./routes/blog.route');
 const geminiroutes = require('./routes/gemini.route')
+const fdaroutes = require('./routes/fda.route')
 
 const connectDB = require('./config/database');
 const cookieParser = require('cookie-parser');
@@ -21,7 +22,12 @@ connectDB();
 require("./utils/cloudinary")
 
 app.use(cookieParser());
-app.use(cors());
+
+app.use(cors({
+    origin:process.env.FRONTEND_URL,
+    credentials:true
+}));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); // Optional: if using URL-encoded forms
 
@@ -33,7 +39,7 @@ app.use('/api/doctors',doctorroutes);
 app.use('/api/appointments',appointmentsroutes);
 app.use('/api/blogs',blogroutes);
 app.use('/api/chat',geminiroutes);
-
+app.use('/api/fda',fdaroutes);
 
 
 const PORT = process.env.PORT || 6900;
