@@ -2,12 +2,11 @@ const axios = require('axios');
 
 const searchdrugs = async (req, res) => {
   try {
-    const { query } = req.body;
+    const { query } = req.query;
     if (!query) {
       return res.status(400).json({ message: "Query parameter is required" });
     }
 
-    // Try search by brand name
     let response;
     try {
       response = await axios.get('https://api.fda.gov/drug/label.json', {

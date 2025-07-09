@@ -1,55 +1,21 @@
 import React, { useState } from 'react';
 import DashNavbar from '../../components/navbars/DashNavbar';
 import { FiSearch } from 'react-icons/fi';
+import { usefda } from '../../hooks/fda/FDA';
+
 
 const FDA = () => {
+  const {getfda,fdaData} = usefda();
   const [searchTerm, setSearchTerm] = useState('');
 
-  // 💊 MOCK DATA for design/testing
-  const [drugs, setDrugs] = useState([
-    {
-      openfda: {
-        brand_name: ['Advil'],
-        generic_name: ['Ibuprofen'],
-        manufacturer_name: ['Pfizer'],
-      },
-      purpose: ['Pain reliever/fever reducer'],
-      indications_and_usage: ['For the temporary relief of minor aches and pains due to headache, toothache, backache, menstrual cramps.'],
-      dosage_and_administration: ['Take 1 tablet every 4 to 6 hours while symptoms persist.'],
-      warnings: ['Reye’s syndrome: Children who have or are recovering from chickenpox or flu-like symptoms should not use this product.'],
-      do_not_use: ['If you have ever had an allergic reaction to any other pain reliever/fever reducer.'],
-      adverse_reactions: ['Nausea, dizziness, rash, or stomach upset may occur.'],
-      storage_and_handling: ['Store at 20°-25°C (68°-77°F) in a dry place away from sunlight.'],
-    },
-    {
-      openfda: {
-        brand_name: ['Dolo 650'],
-        generic_name: ['Paracetamol'],
-        manufacturer_name: ['Micro Labs'],
-      },
-      purpose: ['Pain and fever reduction'],
-      indications_and_usage: ['Used to relieve mild to moderate pain such as headache, muscle ache, arthritis, and fever.'],
-      dosage_and_administration: ['1 tablet every 6 hours. Do not exceed 4g per day.'],
-      warnings: ['Liver warning: This product contains paracetamol. Severe liver damage may occur if taken in excess.'],
-      do_not_use: ['If you have liver disease or consume 3+ alcoholic drinks daily.'],
-      adverse_reactions: ['Rare: Skin rash, liver dysfunction.'],
-      storage_and_handling: ['Keep below 25°C and away from moisture.'],
-    },
-    {
-      openfda: {
-        brand_name: ['Crocin Advance'],
-        generic_name: ['Acetaminophen'],
-        manufacturer_name: ['GSK India'],
-      },
-      purpose: ['Relieves pain and reduces fever'],
-      indications_and_usage: ['Effective against fever, cold, flu, and pain like headaches or body ache.'],
-      dosage_and_administration: ['500 mg to 1000 mg every 4–6 hours. Max 4000 mg per day.'],
-      warnings: ['Overdose can lead to liver failure.'],
-      do_not_use: ['With other acetaminophen-containing drugs.'],
-      adverse_reactions: ['Allergic reactions like swelling or breathing trouble.'],
-      storage_and_handling: ['Store at room temperature away from light.'],
-    },
-  ]);
+  const handleSearch = () => {
+  if (searchTerm.trim()) {
+    getfda(searchTerm.trim());
+  }
+};
+
+
+
 
   return (
     <div>
@@ -68,21 +34,16 @@ const FDA = () => {
               className="outline-none w-full"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-                
-            />
+              onKeyDown={(e) => e.key === 'Enter' && handleSearch()}/>
           </div>
           <button
-            className="px-4 py-2 bg-red-400 text-white rounded-md cursor-not-allowed"
-           
-          >
-            Search
-          </button>
+            className="px-4 py-2 bg-red-600 text-white rounded-md "
+            onClick={handleSearch}>Search</button>
         </div>
-
         {/* Drug Cards */}
-        {drugs.length > 0 ? (
+        {fdaData.length > 0 ? (
           <div className="flex flex-col gap-6">
-            {drugs.map((drug, index) => (
+            {fdaData.map((drug, index) => (
               <div key={index} className="bg-white border-2 border-red-600 p-4 rounded-md shadow-md">
                 <h2 className="text-xl font-bold text-red-700">{drug.openfda?.brand_name?.join(', ') || 'Unknown Brand'}</h2>
                 <p className="text-sm italic mb-1">

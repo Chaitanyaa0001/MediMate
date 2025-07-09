@@ -7,40 +7,63 @@ const doctorSchema = new mongoose.Schema({
         required:true
     },
     firstname:{
-        type:String
+        type:String,
+                required:true
+
     },
     lastname:{
-        type:String
+        type:String,
+                required:true
+
     },
     email:{
-        type:String
+        type:String,
+                required:true
+
     },
     phone:{
-        type:String
+        type:Number,
+                required:true
+
+    },
+    dob:{
+        type:String,
+        required:true
     },
     gender:{
-        type:String
+        type:String,
+                required:true
+
     },
     medicaldegree:{
-        type:String
+        type:String,
+                required:true
+
     },
     experienceyear:{
-        type:String
-    },
-    medicalschool:{
-        type:String
+        type:Number,
+                required:true
+
     },
     certificates:{
-        type:String
+        type:String,
+                required:true
+
     },
     biography:{
-        type:String
+        type:String,
+                required:true
+
     },
     charges:{
-        type:String
+        type:Number,
+                required:true
+
     },
     timings:{
-        type:String
+        type:String,
+                required:true
+
     }
 },{timestamps:true});
 

@@ -13,9 +13,10 @@ const postblogs = async (req, res) => {
       title,
       summary,
       author: user._id,
+      date: new Date()
     });
 
-    res.status(201).json({ message: "Blog posted successfully", blog: newblog });
+    res.status(201).json({ message: "Blog posted successfully",  newblog });
   } catch (err) {
     console.error('Post blog error:', err);
     res.status(500).json({ message: "Internal server error" });
@@ -24,6 +25,8 @@ const postblogs = async (req, res) => {
 
 const getblogs = async (req, res) => {
   try {
+    const userId = req.user;
+    
     const blogs = await Blog.find()
       .populate('author', 'username email')
       .sort({ createdAt: -1 });
@@ -31,8 +34,8 @@ const getblogs = async (req, res) => {
     const formattedBlogs = blogs.map(blog => ({
       title: blog.title,
       summary: blog.summary,
-      authorName: blog.author.name,
-      authorEmail: blog.author.email,
+      authorName: blog.author?.username || 'Unknown',
+      authorEmail: blog.author?.email || 'N/A',
       date: blog.date,
     }));
 
@@ -42,5 +45,6 @@ const getblogs = async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 };
+
 
 module.exports = { postblogs, getblogs };

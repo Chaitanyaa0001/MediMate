@@ -3,57 +3,28 @@ import DashNavbar from '../../components/navbars/DashNavbar';
 import { FiSearch } from 'react-icons/fi';
 import { AnimatePresence } from 'framer-motion';
 import AppointmentModal from '../../components/appointmentform/Appointform';
-
-const dummyDoctors = [
-  {
-    id: 1,
-    firstname: 'Aryan',
-    lastname: 'Sharma',
-    email: 'aryan.sharma@example.com',
-    phone: '9876543210',
-    dob: '1985-05-12',
-    gender: 'Male',
-    medicaldegree: 'MBBS, MD',
-    experienceyear: '10',
-    medicalschool: 'AIIMS Delhi',
-    certificates: 'Fellowship in Endocrinology',
-    biography: 'Expert in internal medicine and diabetes management.',
-    charges: '500',
-    timeings: '10:00 AM - 4:00 PM',
-  },
-  {
-    id: 2,
-    firstname: 'Priya',
-    lastname: 'Verma',
-    email: 'priya.verma@example.com',
-    phone: '9123456780',
-    dob: '1990-03-22',
-    gender: 'Female',
-    medicaldegree: 'BDS, MDS',
-    experienceyear: '5',
-    medicalschool: 'Maulana Azad Dental College',
-    certificates: 'Implantology, Cosmetic Dentistry',
-    biography: 'Dental specialist with a passion for healthy smiles.',
-    charges: '300',
-    timeings: '11:00 AM - 3:00 PM',
-  }
-];
+import { usegetdoctor } from '../../hooks/usedoctorhook/usegetdoctor';
+import { useSelector } from 'react-redux';
+import axios from 'axios';
 
 const BookAppointment = () => {
+  const { fetchdoctor, doctordata } = usegetdoctor();
+  const { user, token } = useSelector((state) => state.auth);
+
   const [searchTerm, setSearchTerm] = useState('');
-  const [doctors, setDoctors] = useState([]);
   const [expandedIds, setExpandedIds] = useState([]);
   const [selectedDoctor, setSelectedDoctor] = useState(null);
   const [appointmentForm, setAppointmentForm] = useState({
-    name: '',
+    patientname: user?.username || '',
+    email: user?.email || '',
     symptoms: '',
     date: '',
     time: '',
   });
 
   useEffect(() => {
-    setDoctors(dummyDoctors);
-  }, []);
+    fetchdoctor();
+  }, [fetchdoctor]);
 
   const toggleExpand = (id) => {
     setExpandedIds((prev) =>
@@ -61,7 +32,7 @@ const BookAppointment = () => {
     );
   };
 
-  const filteredDoctors = doctors.filter((doctor) =>
+  const filteredDoctors = doctordata.filter((doctor) =>
     (
       `${doctor.firstname} ${doctor.lastname} ${doctor.medicaldegree} ${doctor.biography}`
     ).toLowerCase().includes(searchTerm.toLowerCase())
@@ -72,13 +43,37 @@ const BookAppointment = () => {
     setAppointmentForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleAppointmentSubmit = (e) => {
+  const handleAppointmentSubmit = async (e) => {
     e.preventDefault();
-    alert(
-      `Appointment booked with ${selectedDoctor.firstname} ${selectedDoctor.lastname} on ${appointmentForm.date} at ${appointmentForm.time}`
-    );
-    setSelectedDoctor(null);
-    setAppointmentForm({ name: '', symptoms: '', date: '', time: '' });
+    if (!selectedDoctor) return;
+
+    try {
+      const response = await axios.post(
+        '/api/appointments',
+        {
+          doctorId: selectedDoctor._id,
+          ...appointmentForm,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      alert(`✅ ${response.data.message}`);
+      setSelectedDoctor(null);
+      setAppointmentForm({
+        patientname: user?.username || '',
+        email: user?.email || '',
+        symptoms: '',
+        date: '',
+        time: '',
+      });
+    } catch (err) {
+      console.error("Booking error", err.response?.data || err.message);
+      alert(`❌ ${err.response?.data?.message || "Booking failed"}`);
+    }
   };
 
   return (
@@ -90,7 +85,6 @@ const BookAppointment = () => {
           Search and book appointments with trusted doctors
         </p>
 
-        {/* Search Bar */}
         <div className='bg-white flex py-1 justify-center items-center rounded-[6px] shadow-md shadow-gray-400 border-2 border-red-600'>
           <FiSearch className='w-10 text-xl text-gray-500' />
           <input
@@ -98,21 +92,21 @@ const BookAppointment = () => {
             placeholder='Search by name, degree, or specialty'
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className='w-[100%] p-1 outline-none border-l-1 border-gray-400'
+            className='w-full p-1 outline-none border-l border-gray-400'
           />
         </div>
 
-        {/* Doctor Cards */}
-        <div className='flex flex-col lg:flex-row gap-3'>
+        <div className='flex flex-col lg:flex-row flex-wrap gap-4 mt-4'>
           {filteredDoctors.length > 0 ? (
             filteredDoctors.map((doctor) => {
-              const isExpanded = expandedIds.includes(doctor.id);
-              const shouldClamp = doctor.biography.length > 150;
+              const id = doctor._id;
+              const isExpanded = expandedIds.includes(id);
+              const shouldClamp = doctor.biography?.length > 150;
 
               return (
                 <div
-                  key={doctor.id}
-                  className='border-2 border-red-600 rounded-[6px] mt-3 p-4 bg-white shadow-md shadow-gray-600 cursor-pointer flex flex-col  items-start'
+                  key={id}
+                  className='border-2 border-red-600 rounded-lg p-4 bg-white shadow-md w-full lg:w-[45%] flex flex-col'
                 >
                   <h3 className='text-xl font-semibold text-red-700 sm:text-2xl lg:text-3xl'>
                     {doctor.firstname} {doctor.lastname}
@@ -131,20 +125,21 @@ const BookAppointment = () => {
                     <p><strong>Availability:</strong> {doctor.timeings}</p>
                   </div>
 
-                  <p className='font-bold text-[1rem]'>Biography:</p>
+                  <p className='font-bold'>Biography:</p>
                   <p className={`break-words ${!isExpanded && shouldClamp ? 'line-clamp-3' : ''}`}>
                     {doctor.biography}
                   </p>
                   {shouldClamp && (
                     <button
-                      onClick={() => toggleExpand(doctor.id)}
+                      onClick={() => toggleExpand(id)}
                       className='text-blue-600 mt-1 hover:underline'
                     >
                       {isExpanded ? 'Read less' : 'Read more'}
                     </button>
                   )}
+
                   <button
-                    className='mt-2 px-4 py-1 bg-red-600 text-white rounded hover:bg-red-700 transition'
+                    className='mt-3 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition'
                     onClick={() => setSelectedDoctor(doctor)}
                   >
                     Book Appointment
@@ -153,20 +148,21 @@ const BookAppointment = () => {
               );
             })
           ) : (
-            <p>No doctors found matching your search.</p>
+            <p className='mt-4'>No doctors found matching your search.</p>
           )}
         </div>
       </div>
 
-      {/* Appointment Modal */}
       <AnimatePresence>
-        <AppointmentModal
-          doctor={selectedDoctor}
-          formData={appointmentForm}
-          onClose={() => setSelectedDoctor(null)}
-          onChange={handleFormChange}
-          onSubmit={handleAppointmentSubmit}
-        />
+        {selectedDoctor && (
+          <AppointmentModal
+            doctor={selectedDoctor}
+            formData={appointmentForm}
+            onClose={() => setSelectedDoctor(null)}
+            onChange={handleFormChange}
+            onSubmit={handleAppointmentSubmit}
+          />
+        )}
       </AnimatePresence>
     </div>
   );

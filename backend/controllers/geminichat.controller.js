@@ -11,17 +11,15 @@ const generateGeminiResponse = async (req, res) => {
 
   try {
     const medicalPrompt = `
-        You are a professional medical assistant. Only answer medical questions related to human health.
-        For each valid medical query, explain:
-        - What the condition is (overview)
-        - Its common symptoms
-        - Possible causes
-        - Recommended treatments or actions
-        
-        If the query is not medical-related, respond with: "Sorry, I can only answer medical-related questions."
-        
-        User question: ${prompt}
+        You are a professional AI medical assistant. Always respond ONLY to medical-related questions.
+
+        If the query is not related to human health, respond with:
+        > ⚠️ Sorry, I can only help with human medical-related questions.
+        Now answer this:
+        "${prompt}"
         `;
+
+
     const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
     const result = await model.generateContent(medicalPrompt);
     const response = await result.response;

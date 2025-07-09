@@ -16,62 +16,84 @@ const Chats = () => {
     const userMsg = { from: 'user', text: query };
     setChats(prev => [...prev, userMsg]);
 
+    // Add typing placeholder
     setChats(prev => [...prev, { from: 'bot', text: 'MediMate is typing...' }]);
     setQuery('');
 
     const aiResponse = await sendprompt(query);
 
     setChats(prev => [
-      ...prev.slice(0, -1),
+      ...prev.slice(0, -1), // remove typing
       { from: 'bot', text: aiResponse }
     ]);
   };
 
   return (
-    <div>
+    <div className="min-h-screen bg-gray-50">
       <DashNavbar />
 
-      <div className='w-[80%] mx-auto  flex flex-col  m-4'>
-        <h1 className='text-3xl font-bold text-red-600 italic  sm:text-4xl lg:text-6xl'>Ask MediMate</h1>
-        <p className='opacity-60 text-[1rem] mb-7 sm:text-xl lg:text-2xl'>Your AI Medical Assistant – Just describe your symptoms</p>
+      <div className="w-[90%] max-w-5xl mx-auto py-10 flex flex-col gap-6">
+        <h1 className="text-4xl sm:text-5xl font-extrabold text-center text-red-600 italic animate-fade-in">
+          Ask MediMate
+        </h1>
+        <p className="text-lg sm:text-xl text-center text-gray-600 animate-fade-in">
+          Your AI Medical Assistant – Just describe your symptoms
+        </p>
 
-        <div>
-          <div className='flex flex-col gap-4 sm:flex-row w-[100%]'>
-            <input
-              type="text"
-              value={query}
-              onChange={e => setQuery(e.target.value)}
-              className='p-2 rounded-[15px] border border-gray-500  focus:outline-none focus:border-2 focus:border-red-600 '
-              onKeyDown={e => {
-                if (e.key === 'Enter') handleAsk();
-              }}
-              placeholder="e.g., I have chest pain and short breath"
-            />
-            <button onClick={handleAsk} className=''>
-              Ask MediMate
+        {/* Input Section */}
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-center justify-center w-full">
+          <input
+            type="text"
+            value={query}
+            onChange={e => setQuery(e.target.value)}
+            onKeyDown={e => {
+              if (e.key === 'Enter') handleAsk();
+            }}
+            placeholder="e.g., I have chest pain and short breath"
+            className="w-full sm:w-[75%] px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-red-500 outline-none transition"
+          />
+          <button
+            onClick={handleAsk}
+            className="bg-red-600 text-white px-6 py-3 rounded-xl hover:bg-red-700 transition font-medium w-full sm:w-auto"
+          >
+            Ask MediMate
+          </button>
+        </div>
+
+        {/* Suggestion Tags */}
+        <div className="flex flex-wrap justify-center gap-2">
+          {suggestions.map((item, idx) => (
+            <button
+              key={idx}
+              onClick={() => setQuery(item)}
+              className="px-4 py-2 text-sm border border-red-300 text-red-600 rounded-full hover:bg-red-100 transition"
+            >
+              {item}
             </button>
-          </div>
+          ))}
+        </div>
 
-          <div>
-            {suggestions.map((item, idx) => (
-              <button key={idx} onClick={() => setQuery(item)}>
-                {item}
-              </button>
-            ))}
-          </div>
-
-          <div>
-            {chats.length === 0 && (
-              <p>No conversation yet. Ask something!</p>
-            )}
-            {chats.map((msg, idx) => (
-              <div key={idx}>
-                <div>
-                  <ReactMarkdown>{msg.text}</ReactMarkdown>
-                </div>
+        {/* Chat Messages */}
+        <div className="flex flex-col gap-4 mt-4">
+          {chats.length === 0 && (
+            <p className="text-center text-gray-500">No conversation yet. Ask something!</p>
+          )}
+          {chats.map((msg, idx) => (
+            <div
+              key={idx}
+              className={`flex ${msg.from === 'user' ? 'justify-end' : 'justify-start'} animate-fade-in`}
+            >
+              <div
+                className={`max-w-[80%] sm:max-w-[65%] px-4 py-3 rounded-xl text-left text-sm leading-relaxed whitespace-pre-wrap break-words shadow ${
+                  msg.from === 'user'
+                    ? 'bg-red-600 text-white rounded-br-none'
+                    : 'bg-white text-gray-800 rounded-bl-none'
+                }`}
+              >
+                <ReactMarkdown>{msg.text}</ReactMarkdown>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>
