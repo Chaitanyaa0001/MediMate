@@ -4,13 +4,12 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 const generateGeminiResponse = async (req, res) => {
   const { prompt } = req.body;
-
+  
   if (!prompt) {
     return res.status(400).json({ error: "Prompt is required" });
   }
 
   try {
-    // Force the model to think only in medical context
     const medicalPrompt = `
         You are a professional medical assistant. Only answer medical questions related to human health.
         For each valid medical query, explain:

@@ -25,8 +25,7 @@ const postblogs = async (req, res) => {
 const getblogs = async (req, res) => {
   try {
     const blogs = await Blog.find()
-      .populate('authorname', 'name')
-      .populate('authoremail', 'email')
+      .populate('author', 'username email')
       .sort({ createdAt: -1 });
 
     const formattedBlogs = blogs.map(blog => ({

@@ -22,10 +22,10 @@ export const usesignin = () => {
       );
 
      dispatch(setAuth({
-  user: res.data.user,           // ✅ updated
-  role: res.data.user.role,      // ✅ updated
-  token: res.data.token
-}));
+       user: res.data.user,          
+       role: res.data.user.role,     
+      token: res.data.token
+    }));
 
       setsignindata(res.data);
       return res.data;

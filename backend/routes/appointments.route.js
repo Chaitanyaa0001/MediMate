@@ -7,8 +7,8 @@ const checkrole = require('../middlewares/auth.role.middleware');
 const {bookappointment,getbookinngsappointment,updatestatus} = require('../controllers/appointment.controller');
 
 
-router.get('/',checkauth,getbookinngsappointment);
-router.post('/',checkauth,bookappointment);
-router.patch('/status',checkauth,updatestatus)
+router.get('/',checkauth,checkrole('patient'),getbookinngsappointment);
+router.post('/',checkauth,checkrole('patient'),bookappointment);
+router.patch('/status',checkauth,checkrole('doctor'),updatestatus)
 
 module.exports = router;

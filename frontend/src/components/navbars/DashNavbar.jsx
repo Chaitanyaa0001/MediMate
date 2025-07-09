@@ -2,28 +2,27 @@ import React, { useState } from 'react';
 import logo from '../../assets/logo.png';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { RxHamburgerMenu } from 'react-icons/rx';
+import { useSelector } from 'react-redux';
 
 const DashNavbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { role, isAuthenticated } = useSelector((state) => state.auth);
   const [menuitems, setmenuitems] = useState(false);
 
   const toggle = () => setmenuitems(!menuitems);
 
-  const role = localStorage.getItem('medimate_role'); // 'doctor' or 'patient'
-
   const handleLogout = () => {
-    localStorage.removeItem('medimate_role');
     navigate('/signin');
   };
 
-  // Base navigation items (common to both)
+  // ✅ Don't render if role is missing (prevents /null paths)
+  if (!role || !isAuthenticated) return null;
+
   const navItems = [
-    ...(role === 'doctor'
-      ? [{ name: 'Register', path: `/${role}/register` }]
-      : []),
+    ...(role === 'doctor' ? [{ name: 'Register', path: `/${role}/register` }] : []),
     { name: 'Dashboard', path: `/${role}/dashboard` },
-    {name:'Drug Info (FDA)', path : '/fda'},
+    { name: 'Drug Info (FDA)', path: '/fda' },
     { name: 'Chats', path: '/chats' },
     { name: 'Appointments', path: `/${role}/appointments` },
     { name: 'Blogs', path: `/${role}/blogs` },

@@ -3,7 +3,7 @@ import './App.css';
 import { Routes, Route } from 'react-router-dom';
 
 import Getstarted from './pages/getstarted/Getstarted';
-import Signin from './pages/auth/signin/Signin'
+import Signin from './pages/auth/signin/Signin';
 import Signup from './pages/auth/signup/Signup';
 
 // Patient Pages
@@ -17,45 +17,98 @@ import ManageAppointments from './pages/appoitnments/ManageAppointment';
 import Postblog from './pages/blogs/Postblog';
 import Register from './pages/register/Register';
 
-
-import { useSelector } from 'react-redux';
-
 // Common
 import Chats from './pages/chats/Chats';
 import Settings from './pages/settings/Settings';
 import FDA from './pages/fda/FDA';
 
-
-
+// Auth wrapper
+import Privateroute from './privateroutes/Privateroute';
 const App = () => {
-    const { role, isAuthenticated } = useSelector((state) => state.auth);
-
- return (
+  return (
     <Routes>
       <Route path="/" element={<Getstarted />} />
       <Route path="/signin" element={<Signin />} />
       <Route path="/signup" element={<Signup />} />
-      <Route path='/fda' element={<FDA />} />
+      <Route path="/fda" element={<FDA />} />
 
-      {isAuthenticated && role === 'patient' && (
-        <>
-          <Route path="/patient/dashboard" element={<PatientDashboard />} />
-          <Route path="/patient/appointments" element={<BookAppointment />} />
-          <Route path="/patient/blogs" element={<Blog />} />
-        </>
-      )}
+      {/* Patient Protected Routes */}
+      <Route
+        path="/patient/dashboard"
+        element={
+          <Privateroute role="patient">
+            <PatientDashboard />
+          </Privateroute>
+        }
+      />
+      <Route
+        path="/patient/appointments"
+        element={
+          <Privateroute role="patient">
+            <BookAppointment />
+          </Privateroute>
+        }
+      />
+      <Route
+        path="/patient/blogs"
+        element={
+          <Privateroute role="patient">
+            <Blog />
+          </Privateroute>
+        }
+      />
 
-      {isAuthenticated && role === 'doctor' && (
-        <>
-          <Route path="/doctor/dashboard" element={<DoctorDashboard />} />
-          <Route path="/doctor/appointments" element={<ManageAppointments />} />
-          <Route path="/doctor/blogs" element={<Postblog />} />
-          <Route path="/doctor/register" element={<Register />} />
-        </>
-      )}
+      {/* Doctor Protected Routes */}
+      <Route
+        path="/doctor/dashboard"
+        element={
+          <Privateroute role="doctor">
+            <DoctorDashboard />
+          </Privateroute>
+        }
+      />
+      <Route
+        path="/doctor/appointments"
+        element={
+          <Privateroute role="doctor">
+            <ManageAppointments />
+          </Privateroute>
+        }
+      />
+      <Route
+        path="/doctor/blogs"
+        element={
+          <Privateroute role="doctor">
+            <Postblog />
+          </Privateroute>
+        }
+      />
+      <Route
+        path="/doctor/register"
+        element={
+          <Privateroute role="doctor">
+            <Register />
+          </Privateroute>
+        }
+      />
 
-      <Route path="/chats" element={<Chats />} />
-      <Route path="/settings" element={<Settings />} />
+      {/* Common Protected Routes */}
+      <Route
+        path="/chats"
+        element={
+          <Privateroute>
+            <Chats />
+          </Privateroute>
+        }
+      />
+      <Route
+        path="/settings"
+        element={
+          <Privateroute>
+            <Settings />
+          </Privateroute>
+        }
+      />
     </Routes>
   );
 };
