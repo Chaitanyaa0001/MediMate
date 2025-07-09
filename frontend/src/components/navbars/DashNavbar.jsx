@@ -3,8 +3,11 @@ import logo from '../../assets/logo.png';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { RxHamburgerMenu } from 'react-icons/rx';
 import { useSelector } from 'react-redux';
+import { uselogout } from '../../hooks/logout/uselogout';
 
 const DashNavbar = () => {
+
+  const {logout} = uselogout();
   const location = useLocation();
   const navigate = useNavigate();
   const { role, isAuthenticated } = useSelector((state) => state.auth);
@@ -13,7 +16,8 @@ const DashNavbar = () => {
   const toggle = () => setmenuitems(!menuitems);
 
   const handleLogout = () => {
-    navigate('/signin');
+    logout();
+    
   };
 
   // ✅ Don't render if role is missing (prevents /null paths)

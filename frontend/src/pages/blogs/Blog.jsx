@@ -4,11 +4,16 @@ import { usegetblogs } from '../../hooks/blogshook/usegetblog';
 import { useSelector } from 'react-redux';
 
 const Blog = () => {
-  const { role } = useSelector((state) => state.auth); // ✅ Redux role
-  const { blogdata = [], loading, error } = usegetblogs(); // ✅ Handle undefined blogdata
+  const { role } = useSelector((state) => state.auth);
+  const { blogdata = [], fetchBlogs } = usegetblogs();
+
   const [expandedBlogIndex, setExpandedBlogIndex] = useState(null);
   const summaryRefs = useRef([]);
   const [visibleReadMore, setVisibleReadMore] = useState([]);
+
+  useEffect(() => {
+    fetchBlogs();
+  }, []); 
 
   useEffect(() => {
     const results = summaryRefs.current.map((el) => {
@@ -18,10 +23,10 @@ const Blog = () => {
     setVisibleReadMore(results);
   }, [blogdata]);
 
-  // 🚫 Protect from wrong role
-  if (role !== 'patient') return null;
+  if (role !== 'patient') {
+    return <h1 className="text-center text-red-600 text-2xl mt-20">Access Denied</h1>;
+  }
 
-  if(!blogdata) return <h1>loading....</h1>
   return (
     <div>
       <DashNavbar />
@@ -33,9 +38,7 @@ const Blog = () => {
           </p>
         </div>
 
-        {loading && <p className="text-center text-gray-500 italic">Loading blogs...</p>}
-        {error && <p className="text-center text-red-600">Error loading blogs</p>}
-
+        {/* Blog List */}
         {blogdata.length > 0 ? (
           <div className="py-3 flex flex-col gap-6">
             {blogdata.map((blog, index) => {
@@ -45,11 +48,15 @@ const Blog = () => {
                   key={index}
                   className="border-2 bg-white border-red-600 flex flex-col p-5 rounded-md shadow-md hover:shadow-lg transition-all duration-300 ease-in-out transform hover:scale-[1.01]"
                 >
-                  <p className="text-sm text-gray-500 italic mb-1">{blog.date}</p>
-                  <h3 className="text-xl font-semibold text-red-700 lg:text-2xl italic mb-2">{blog.title}</h3>
+                  <p className="text-sm text-gray-500 italic mb-1">
+                    {new Date(blog.date).toLocaleDateString()}
+                  </p>
+                  <h3 className="text-xl font-semibold text-red-700 lg:text-2xl italic mb-2">
+                    {blog.title}
+                  </h3>
                   <p
                     ref={(el) => (summaryRefs.current[index] = el)}
-                    className={`text-gray-800 text-[0.95rem] break-words transition-all ease-in-out duration-300 ${
+                    className={`text-gray-800 text-[0.95rem] break-words transition-all duration-300 ${
                       !isExpanded ? 'line-clamp-3' : ''
                     }`}
                   >
@@ -72,7 +79,7 @@ const Blog = () => {
             })}
           </div>
         ) : (
-          !loading && <p className="text-center text-gray-500 italic mt-10">No blogs found.</p>
+          <p className="text-center text-gray-500 italic mt-10">No blogs found.</p>
         )}
       </div>
     </div>

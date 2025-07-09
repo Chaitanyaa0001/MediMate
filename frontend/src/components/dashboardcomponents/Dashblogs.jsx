@@ -71,7 +71,7 @@ const Dashblogs = ({ role }) => {
             </div>
           ))}
         </div>
-      )}
+      )};
     </div>
   );
 };
