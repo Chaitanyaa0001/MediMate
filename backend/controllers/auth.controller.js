@@ -1,5 +1,7 @@
     const User = require("../models/user.model");
+    const passport = require('passport');
     const bcrypt = require('bcryptjs');
+    const jwt = require('jsonwebtoken');
     const JWT_SECRET = process.env.JWT_SECRET;
     const generatetoken = require('../utils/generatetoken');
 
@@ -89,4 +91,47 @@
         }
 
     }
-    module.exports  = {signup,signin,logout}
+
+const googleLogin = (req, res, next) => {
+  const { role } = req.query;
+
+  if (!role || (role !== 'patient' && role !== 'doctor')) {
+return res.redirect(`${process.env.FRONTEND_URL}/signin?error=role-required`);
+  }
+
+  passport.authenticate('google', {
+    scope: ['profile', 'email'],
+    session: false,
+    state: role, // just for frontend fallback
+  })(req, res, next);
+};
+
+const googleCallback = (req, res, next) => {
+  passport.authenticate('google', { session: false }, (err, user) => {
+    if (err || !user) {
+      console.error('Google Auth Error:', err);
+return res.redirect(`${process.env.FRONTEND_URL}/signin?error=google-failed`);
+    }
+
+    const token = generatetoken(user._id, user.role);
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "None",
+      path: "/",
+    });
+
+    // Redirect to dashboard based on role
+    const dashboard = user.role === 'doctor' ? '/doctor/dashboard' : '/patient/dashboard';
+
+    res.redirect(`${process.env.FRONTEND_URL}${dashboard}`);
+  })(req, res, next);
+};
+
+
+
+
+    
+    module.exports  = {signup,signin,logout,  googleLogin,
+  googleCallback}

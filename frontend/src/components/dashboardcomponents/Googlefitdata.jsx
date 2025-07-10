@@ -36,7 +36,7 @@ const Googlefitdata = () => {
         {userdata.map((data, index) => (
           <div
             key={index}
-            className="bg-white  border-2  border-gray-300 shadow-md hover:shadow-lg transition-all duration-300 rounded-xl p-4 flex items-center justify-between"
+            className="bg-white  border-2  border-red-600 shadow-md hover:shadow-lg transition-all duration-300 rounded-xl p-4 flex items-center justify-between"
           >
             <div>
               <h1 className="text-xl font-bold text-gray-800 mb-1">{data.title}</h1>

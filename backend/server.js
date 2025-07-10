@@ -11,6 +11,9 @@ const blogroutes = require('./routes/blog.route');
 const geminiroutes = require('./routes/gemini.route')
 const fdaroutes = require('./routes/fda.route')
 
+const passport = require('passport');
+require('./config/passport');
+
 const connectDB = require('./config/database');
 const cookieParser = require('cookie-parser');
 
@@ -27,6 +30,8 @@ app.use(cors({
     origin:process.env.FRONTEND_URL,
     credentials:true
 }));
+
+app.use(passport.initialize());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); // Optional: if using URL-encoded forms

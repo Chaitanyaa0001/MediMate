@@ -2,7 +2,8 @@ import React from 'react'
 import DashNavbar from '../../components/navbars/DashNavbar';
 import Googlefitdata from '../../components/dashboardcomponents/Googlefitdata';
 import Quickactions from '../../components/dashboardcomponents/Quickactions';
-import Blogpost from '../../components/dashboardcomponents/Dashblogs';
+import Dashblogs from '../../components/dashboardcomponents/Dashblogs';
+import DoctorDashboardAppointments from '../../components/dashboardcomponents/DoctorDashboardAppointments';
 
 
 const DoctorDashboard = () => {
@@ -11,7 +12,9 @@ const DoctorDashboard = () => {
       <DashNavbar/>
       <Googlefitdata/>
       <Quickactions/>
-      <Blogpost role= "doctor"/>
+      <Dashblogs role='doctor'/>
+      <DoctorDashboardAppointments/>
+
     </div>
   )
 }

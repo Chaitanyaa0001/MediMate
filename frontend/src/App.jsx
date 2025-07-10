@@ -5,7 +5,6 @@ import { Routes, Route } from 'react-router-dom';
 import Getstarted from './pages/getstarted/Getstarted';
 import Signin from './pages/auth/signin/Signin';
 import Signup from './pages/auth/signup/Signup';
-
 // Patient Pages
 import PatientDashboard from './pages/dashboard/PatientDashboard';
 import BookAppointment from './pages/appoitnments/BookAppointment';
@@ -24,7 +23,11 @@ import FDA from './pages/fda/FDA';
 
 // Auth wrapper
 import Privateroute from './privateroutes/Privateroute';
+import useAuthBootstrap from './hooks/bootstrap/useAuthBootstrap';
 const App = () => {
+
+  useAuthBootstrap();
+  
   return (
     <Routes>
       <Route path="/" element={<Getstarted />} />

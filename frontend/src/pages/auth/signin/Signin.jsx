@@ -1,11 +1,17 @@
 import React, { useState } from 'react';
 import logo from '../../../assets/logo.png';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { usesignin } from '../../../hooks/authhooks/useSignin';
+import useGoogleLogin from '../../../hooks/googlelogin/useGoogleLogin';
 
 const Signin = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const googleError = queryParams.get('error');
+
   const { signin, loading, error } = usesignin();
+  const { loginWithGoogle } = useGoogleLogin();
 
   const [logindata, setlogindata] = useState({
     email: '',
@@ -26,13 +32,12 @@ const Signin = () => {
     const result = await signin(logindata);
 
     if (result) {
-  if (result.user.role === 'doctor') {
-    navigate('/doctor/register');
-  } else {
-    navigate('/patient/dashboard');
-  }
-}
-
+      if (result.user.role === 'doctor') {
+        navigate('/doctor/register');
+      } else {
+        navigate('/patient/dashboard');
+      }
+    }
   };
 
   return (
@@ -49,9 +54,15 @@ const Signin = () => {
       >
         <h1 className="text-2xl text-red-600 font-bold">Login</h1>
 
-        {/* Error message */}
+        {/* Error messages */}
         {error && <p className="text-red-600 text-sm">{error}</p>}
         {loading && <p className="text-blue-600 text-sm">Logging in...</p>}
+        {googleError && (
+          <p className="text-red-600 text-sm">
+            {googleError === 'role-required' && 'Please select a role before signing in with Google.'}
+            {googleError === 'google-failed' && 'Google sign-in failed. Please try again.'}
+          </p>
+        )}
 
         <div className="w-full">
           <label className="text-sm text-gray-600">Email</label>
@@ -108,6 +119,14 @@ const Signin = () => {
           className="w-full bg-blue-600 text-white py-2 mt-4 rounded-md hover:bg-blue-700 transition"
         >
           Login
+        </button>
+
+        <button
+          type="button"
+          onClick={() => loginWithGoogle(logindata.role)}
+          className="w-full bg-red-600 text-white py-2 mt-2 rounded-md hover:bg-red-700 transition"
+        >
+          Sign in with Google
         </button>
 
         <span className="text-sm text-center my-2">
