@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import DashNavbar from '../../components/navbars/DashNavbar';
-import { usePostDoctor } from '../../hooks/usedoctorhook/usepostdoctor';
+import {usepostdoctor} from '../../hooks/usedoctorhook/usepostdoctor'
 
 const Register = () => {
-  const { postDoctor } = usePostDoctor();
+  const {createdoctor} = usepostdoctor();
 
   const [registerdata, setregisterdata] = useState({
     firstname: '',
@@ -22,44 +22,35 @@ const Register = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
-    // Convert number fields from string to actual number
-const parsedValue = ['phone', 'charges', 'experienceyear'].includes(name)
-  ? value === '' ? '' : Number(value)
-  : value;
-
-
     setregisterdata((prev) => ({
       ...prev,
-      [name]: parsedValue,
+      [name]: value,
     }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const res = await postDoctor(registerdata);
-
-      if (res) {
-        setregisterdata({
-          firstname: '',
-          lastname: '',
-          email: '',
-          phone: '',
-          dob: '',
-          gender: '',
-          medicaldegree: '',
-          experienceyear: '',
-          certificates: '',
-          biography: '',
-          charges: '',
-          timings: '',
-        });
-        console.log("posted", res);
-      }
-    } catch (err) {
-      console.error("error while posting the doctor ", err.message);
+     const res = await createdoctor(registerdata);
+    console.log(registerdata);
+    if(res){
+      setregisterdata({
+        firstname: '',
+        lastname: '',
+        email: '',
+        phone: '',
+        dob: '',
+        gender: '',
+        medicaldegree: '',
+        experienceyear: '',
+        certificates: '',
+        biography: '',
+        charges: '',
+        timings: '',
+      });
     }
+      
+      
+ 
   };
 
   return (

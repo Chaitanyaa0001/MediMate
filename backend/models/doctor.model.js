@@ -8,22 +8,22 @@ const doctorSchema = new mongoose.Schema({
     },
     firstname:{
         type:String,
-                required:true
+        required:true
 
     },
     lastname:{
         type:String,
-                required:true
+        required:true
 
     },
     email:{
         type:String,
-                required:true
+        required:true
 
     },
     phone:{
         type:Number,
-                required:true
+        required:true
 
     },
     dob:{
@@ -32,37 +32,37 @@ const doctorSchema = new mongoose.Schema({
     },
     gender:{
         type:String,
-                required:true
+        required:true
 
     },
     medicaldegree:{
         type:String,
-                required:true
+        required:true
 
     },
     experienceyear:{
         type:Number,
-                required:true
+        required:true
 
     },
     certificates:{
         type:String,
-                required:true
+        required:true
 
     },
     biography:{
         type:String,
-                required:true
+        required:true
 
     },
     charges:{
         type:Number,
-                required:true
+        required:true
 
     },
     timings:{
         type:String,
-                required:true
+        required:true
 
     }
 },{timestamps:true});

@@ -1,43 +1,32 @@
 import React, { useEffect, useState } from 'react';
 import DashNavbar from '../../components/navbars/DashNavbar';
-import { HiCheck, HiX } from 'react-icons/hi'; 
+import { HiCheck, HiX } from 'react-icons/hi';
+import { useManageAppointments } from '../../hooks/bookings/usemanagebookings';
 
 const ManageAppointment = () => {
-  const [appointments, setAppointments] = useState(null);
+  const { appointmentsdata, updateStatus } = useManageAppointments();
+  const [appointments, setAppointments] = useState([]);
   const [loadingId, setLoadingId] = useState(null);
 
+  // Sync data from the hook into local state
   useEffect(() => {
-    setAppointments([
-      {
-        id: 1,
-        patientName: 'Chaitanya Sharma',
-        email: 'chai.sharma@email.com',
-        date: '2025-07-05',
-        time: '10:30 AM',
-        symptoms: 'Fever, Headache',
-        status: 'pending',
-      },
-      {
-        id: 2,
-        patientName: 'Riya Verma',
-        email: 'riya@email.com',
-        date: '2025-07-06',
-        time: '2:00 PM',
-        symptoms: 'Cough , Sore throat',
-        status: 'pending',
-      },
-    ]);
-  }, []);
+    setAppointments(appointmentsdata);
+  }, [appointmentsdata]);
 
-  const handleStatusUpdate = (id, newStatus) => {
+  const handleStatusUpdate = async (id, newStatus) => {
     setLoadingId(id);
-    setTimeout(() => {
-      const updatedAppointments = appointments.map((appt) =>
-        appt.id === id ? { ...appt, status: newStatus } : appt
+    try {
+      await updateStatus(id, newStatus); // Calls API and hook sets new status
+      setAppointments((prev) =>
+        prev.map((appt) =>
+          appt._id === id ? { ...appt, status: newStatus } : appt
+        )
       );
-      setAppointments(updatedAppointments);
+    } catch (err) {
+      console.error("Error updating status:", err);
+    } finally {
       setLoadingId(null);
-    }, 1000); // simulate delay
+    }
   };
 
   return (
@@ -55,30 +44,47 @@ const ManageAppointment = () => {
         ) : (
           <div className="flex flex-col gap-5 py-4">
             {appointments.map((appt) => (
-              <div key={appt.id} className="bg-white p-6 border-2 border-red-500 rounded-[6px] shadow-md hover:shadow-lg transition-all duration-300 ease-in-out transform hover:scale-[1.01] animate-fade-in">
-                <div className="flex justify-between items-start flex-col lg:flex-row  lg:items-center ">
-                  <div className=" mb-3">
-                    <h2 className="text-2xl font-semibold text-gray-900 italic ">{appt.patientName}</h2>
-                    <p className="text-[0.8rem]  mb-2 italic lg:text-[0.9rem]">{appt.email}</p>
+              <div
+                key={appt._id}
+                className="bg-white p-6 border-2 border-red-500 rounded-[6px] shadow-md hover:shadow-lg transition-all duration-300 ease-in-out transform hover:scale-[1.01] animate-fade-in"
+              >
+                <div className="flex justify-between items-start flex-col lg:flex-row lg:items-center">
+                  <div className="mb-3">
+                    <h2 className="text-2xl font-semibold text-gray-900 italic">
+                      {appt.patientname}
+                    </h2>
+                    <p className="text-[0.8rem] mb-2 italic lg:text-[0.9rem]">
+                      {appt.email}
+                    </p>
 
                     <div>
-                      <div className='flex  justify-between  lg:flex-col lg:gap-3  gap-20 mb-2 '>
-                        <p className="text-[1rem] font-semibold ">Date:<span className='opacity-70 font-medium  '>{appt.date}</span></p>
-                        <p className="text-[1rem]  font-semibold ">Time: <span className='opacity-70 font-medium  '>{appt.time}</span></p>
+                      <div className="flex justify-between lg:flex-col lg:gap-3 gap-20 mb-2">
+                        <p className="text-[1rem] font-semibold">
+                          Date:
+                          <span className="opacity-70 font-medium"> {appt.date}</span>
+                        </p>
+                        <p className="text-[1rem] font-semibold">
+                          Time:
+                          <span className="opacity-70 font-medium"> {appt.time}</span>
+                        </p>
                       </div>
-                      
-                     <div className="flex flex-wrap gap-1 mt-4    ">
-                     {appt.symptoms.split(',').map((symptom, i) => (
-                       <span key={i} className="border-1 border-red-500 rounded-[6px]  text-red-700 px-1   bg-red-200">{symptom.trim()}</span>
-                     ))}
-                    </div>
 
-                    </div> 
+                      <div className="flex flex-wrap gap-1 mt-4">
+                        {appt.symptoms.split(',').map((symptom, i) => (
+                          <span
+                            key={i}
+                            className="border-1 border-red-500 rounded-[6px] text-red-700 px-1 bg-red-200"
+                          >
+                            {symptom.trim()}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
                   </div>
 
                   <div className="flex flex-row gap-2 mt-1">
                     {appt.status === 'pending' ? (
-                      loadingId === appt.id ? (
+                      loadingId === appt._id ? (
                         <button
                           type="button"
                           disabled
@@ -108,18 +114,18 @@ const ManageAppointment = () => {
                       ) : (
                         <>
                           <button
-                            onClick={() => handleStatusUpdate(appt.id, 'accepted')}
-                            className=" flex items-center cursor-pointer bg-green-500 text-white  px-2 py-1 lg:px-4 lg:py-2 rounded-md hover:bg-green-600 transition "
+                            onClick={() => handleStatusUpdate(appt._id, 'accepted')}
+                            className="flex items-center cursor-pointer bg-green-500 text-white px-2 py-1 lg:px-4 lg:py-2 rounded-md hover:bg-green-600 transition"
                           >
-                            <HiCheck/>
-                             Accept
+                            <HiCheck />
+                            Accept
                           </button>
                           <button
-                            onClick={() => handleStatusUpdate(appt.id, 'rejected')}
-                            className=" flex items-center cursor-pointer bg-red-500 text-white  px-2 py-1 lg:px-4.5 lg:py-2 rounded-md hover:bg-red-600 transition"
+                            onClick={() => handleStatusUpdate(appt._id, 'rejected')}
+                            className="flex items-center cursor-pointer bg-red-500 text-white px-2 py-1 lg:px-4.5 lg:py-2 rounded-md hover:bg-red-600 transition"
                           >
-                            <HiX/>
-                             Reject
+                            <HiX />
+                            Reject
                           </button>
                         </>
                       )

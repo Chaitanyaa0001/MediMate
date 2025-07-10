@@ -5,11 +5,12 @@ import { AnimatePresence } from 'framer-motion';
 import AppointmentModal from '../../components/appointmentform/Appointform';
 import { usegetdoctor } from '../../hooks/usedoctorhook/usegetdoctor';
 import { useSelector } from 'react-redux';
-import axios from 'axios';
+import { usebook } from '../../hooks/bookings/usebook';
 
 const BookAppointment = () => {
   const { fetchdoctor, doctordata } = usegetdoctor();
-  const { user, token } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.auth);
+  const { bookdoctor } = usebook();
 
   const [searchTerm, setSearchTerm] = useState('');
   const [expandedIds, setExpandedIds] = useState([]);
@@ -45,35 +46,35 @@ const BookAppointment = () => {
 
   const handleAppointmentSubmit = async (e) => {
     e.preventDefault();
-    if (!selectedDoctor) return;
+
+    if (!selectedDoctor || !selectedDoctor.userId) {
+      console.error("Doctor or doctor.userId is missing", selectedDoctor);
+      return;
+    }
+
+    console.log("Booking appointment with doctorId:", selectedDoctor.userId);
 
     try {
-      const response = await axios.post(
-        '/api/appointments',
-        {
-          doctorId: selectedDoctor._id,
-          ...appointmentForm,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      alert(`✅ ${response.data.message}`);
-      setSelectedDoctor(null);
-      setAppointmentForm({
-        patientname: user?.username || '',
-        email: user?.email || '',
-        symptoms: '',
-        date: '',
-        time: '',
+      const res = await bookdoctor({
+        ...appointmentForm,
+        doctorId: selectedDoctor.userId, // ✅ Correct userId
       });
-    } catch (err) {
-      console.error("Booking error", err.response?.data || err.message);
-      alert(`❌ ${err.response?.data?.message || "Booking failed"}`);
+
+      if (res) {
+        console.log("Booking successful:", res);
+      }
+    } catch (error) {
+      console.error("Booking failed:", error);
     }
+
+    setSelectedDoctor(null);
+    setAppointmentForm({
+      patientname: user?.username || '',
+      email: user?.email || '',
+      symptoms: '',
+      date: '',
+      time: '',
+    });
   };
 
   return (
@@ -119,10 +120,9 @@ const BookAppointment = () => {
                     <p><strong>DOB:</strong> {doctor.dob}</p>
                     <p><strong>Gender:</strong> {doctor.gender}</p>
                     <p><strong>Experience:</strong> {doctor.experienceyear} years</p>
-                    <p><strong>Medical School:</strong> {doctor.medicalschool}</p>
                     <p><strong>Certificates:</strong> {doctor.certificates}</p>
                     <p><strong>Charges:</strong> ₹{doctor.charges}</p>
-                    <p><strong>Availability:</strong> {doctor.timeings}</p>
+                    <p><strong>Availability:</strong> {doctor.timings}</p>
                   </div>
 
                   <p className='font-bold'>Biography:</p>
@@ -140,7 +140,13 @@ const BookAppointment = () => {
 
                   <button
                     className='mt-3 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition'
-                    onClick={() => setSelectedDoctor(doctor)}
+                    onClick={() => {
+                      if (!doctor.userId) {
+                        console.error("No userId found in doctor object:", doctor);
+                        return;
+                      }
+                      setSelectedDoctor(doctor);
+                    }}
                   >
                     Book Appointment
                   </button>
@@ -154,7 +160,7 @@ const BookAppointment = () => {
       </div>
 
       <AnimatePresence>
-        {selectedDoctor && (
+        {selectedDoctor?.userId && (
           <AppointmentModal
             doctor={selectedDoctor}
             formData={appointmentForm}
