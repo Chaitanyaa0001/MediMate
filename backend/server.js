@@ -39,7 +39,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true })); // Optional: if using URL-encoded forms
 
 
-// routes 
+// routes   
 app.use('/api/auth', authorutes);
 app.use('/api/user',userroutes);
 app.use('/api/doctors',doctorroutes);   

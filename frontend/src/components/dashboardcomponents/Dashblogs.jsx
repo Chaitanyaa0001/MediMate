@@ -30,12 +30,13 @@ const Dashblogs = () => {
 
   return (
     <div className="w-[90%] lg:w-[85%] mx-auto animate-fade-in">
-      <h2 className="text-2xl font-bold mb-4 text-blue-700 sm:text-3xl lg:text-4xl">
-        📝 {heading}
+      <h2 className="text-2xl font-bold mt-4 italic text-blue-700 sm:text-3xl lg:text-4xl">
+       {heading}
       </h2>
+      <p className='italic opacity-70 mb-2'>Check the blogs</p>
 
       {blogs.length === 0 ? (
-        <div className="flex flex-col items-center justify-center bg-yellow-50 p-6 rounded-xl border-2 border-yellow-300 shadow-md shadow-gray-400 animate-pulse">
+        <div className="flex flex-col items-center justify-center bg-yellow-50 p-6 rounded-xl border-3 border-red-600 shadow-md shadow-gray-400 animate-pulse">
           <MdOutlineArticle className="text-yellow-500 text-6xl mb-2" />
           <p className="text-lg text-yellow-700 font-medium">
             {role?.toLowerCase() === 'doctor'

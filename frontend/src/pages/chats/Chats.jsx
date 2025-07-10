@@ -36,7 +36,15 @@ const Chats = () => {
         <h1 className="text-4xl sm:text-5xl font-extrabold text-center text-red-600 italic animate-fade-in">
           Ask MediMate
         </h1>
-        <p className="text-lg sm:text-xl text-center text-gray-600 animate-fade-in">
+
+        {/* Disclaimer Note */}
+        <p className="text-center text-sm sm:text-base text-yellow-700 bg-yellow-100 border border-yellow-300 px-4 py-2 rounded-xl animate-pulse shadow-md max-w-3xl mx-auto mt-2">
+          ⚠️ This prototype is intended for informational and recommendation purposes only.
+          It is based on global medical datasets and should not replace professional consultation.
+          Please consult or book a certified doctor for any medical condition.
+        </p>
+
+        <p className="text-lg sm:text-xl text-center text-gray-600 animate-fade-in mt-4">
           Your AI Medical Assistant – Just describe your symptoms
         </p>
 

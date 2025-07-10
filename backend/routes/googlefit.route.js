@@ -1,13 +1,15 @@
-// routes/googlefit.routes.js
 const express = require('express');
 const router = express.Router();
 const {
   authGoogleFit,
   googleFitCallback,
+  fetchGoogleFitData
 } = require('../controllers/googlefit.controller');
 
-router.get('/auth', authGoogleFit);
+const checkauth = require('../middlewares/auth.middleware');
 
-router.get('/callback', googleFitCallback);
+router.get('/auth', checkauth, authGoogleFit);
+router.get('/callback', googleFitCallback); // public
+router.get('/data', checkauth, fetchGoogleFitData);
 
 module.exports = router;
