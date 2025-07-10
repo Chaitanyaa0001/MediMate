@@ -4,6 +4,7 @@ import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import 'react-toastify/dist/ReactToastify.css';
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const Googlefitdata = () => {
 
@@ -18,7 +19,7 @@ const Googlefitdata = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get('http://localhost:6900/api/fit/data', {
+        const res = await axios.get(`${BASE_URL}/api/fit/data`, {
           withCredentials: true
         });
 
@@ -53,7 +54,7 @@ const Googlefitdata = () => {
   }, []);
 
   const connectGoogleFit = () => {
-    window.open('http://localhost:6900/api/fit/auth', '_blank', 'noopener,noreferrer');
+    window.open(`${BASE_URL}/api/fit/auth`, '_blank', 'noopener,noreferrer');
   };
 
   const getIcon = (type) => {
