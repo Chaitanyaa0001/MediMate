@@ -9,7 +9,9 @@ const doctorroutes = require('./routes/doctor.route');
 const appointmentsroutes = require('./routes/appointments.route');
 const blogroutes = require('./routes/blog.route');
 const geminiroutes = require('./routes/gemini.route')
-const fdaroutes = require('./routes/fda.route')
+const fdaroutes = require('./routes/fda.route');
+const googleFitRoutes = require('./routes/googlefit.route');
+
 
 const passport = require('passport');
 require('./config/passport');
@@ -45,6 +47,7 @@ app.use('/api/appointments',appointmentsroutes);
 app.use('/api/blogs',blogroutes);
 app.use('/api/chat',geminiroutes);
 app.use('/api/fda',fdaroutes);
+app.use('/api/fit', googleFitRoutes);
 
 
 const PORT = process.env.PORT || 6900;

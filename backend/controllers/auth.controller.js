@@ -50,9 +50,12 @@
             if(!email || !password || !role){
                 return res.status(400).json({message: "All Feilds Are Required !!"})
             };
-            const existinguser = await User.findOne({email,role})
+            const existinguser = await User.findOne({email})
             if(!existinguser){
                 return res.status(404).json({message:"User Does not exist !"})
+            }
+            if (existinguser.role !== role) {
+                 return res.status(403).json({ message: `This email is registered as a ${existinguser.role}. Please select the correct role.` });
             }
             const ismatch = await bcrypt.compare(password,existinguser.password)
             if(!ismatch){

@@ -3,8 +3,13 @@ import logo from '../../../assets/logo.png';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { usesignin } from '../../../hooks/authhooks/useSignin';
 import useGoogleLogin from '../../../hooks/googlelogin/useGoogleLogin';
+import { useDispatch } from 'react-redux';
+import { setAuth } from '../../../redux/slice';
+
 
 const Signin = () => {
+  const dispatch = useDispatch();
+
   const navigate = useNavigate();
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
@@ -32,12 +37,26 @@ const Signin = () => {
     const result = await signin(logindata);
 
     if (result) {
-      if (result.user.role === 'doctor') {
-        navigate('/doctor/register');
-      } else {
-        navigate('/patient/dashboard');
+      if (result.message?.includes("User Does not exist")) {
+        setError("This email is not registered with selected role.")
+        return;
       }
+      dispatch(setAuth({
+      user: result.user,
+      role: result.user.role,
+      token: result.token , // your backend sends token too
+    }));
+      if (result?.user?.role === 'doctor') {
+  navigate('/doctor/register');
+} else if (result?.user?.role === 'patient') {
+  navigate('/patient/dashboard');
+} else {
+  // Fallback in case something goes wrong
+  navigate('/');
+}
     }
+    
+
   };
 
   return (
