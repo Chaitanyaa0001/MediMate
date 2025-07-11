@@ -14,24 +14,42 @@ const fdaroutes = require('./routes/fda.route');
 const googleFitRoutes = require('./routes/googlefit.route');
 const connectDB = require('./config/database');
 
-// Initialize app and DB
-const app = express();
+// Connect to MongoDB
 connectDB();
 require("./utils/cloudinary");
 
-// CORS + Cookie config
+const app = express();
+
+// --- Middleware ---
+
+// Cookie parser (for auth tokens)
 app.use(cookieParser());
+
+// CORS Setup
+const allowedOrigins = [
+  process.env.FRONTEND_URL,
+  'https://medi-mate-delta.vercel.app'
+];
+
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'https://medi-mate-delta.vercel.app',
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("CORS not allowed from this origin: " + origin));
+    }
+  },
   credentials: true,
 }));
-app.options("*", cors()); // ✅ Handle CORS preflight (important for Google login)
+
+// Preflight (OPTIONS) handler
+app.options("*", cors());
 
 // Body parsers
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Routes
+// --- Routes ---
 app.use('/api/auth', authorutes);
 app.use('/api/user', userroutes);
 app.use('/api/doctors', doctorroutes);
@@ -41,8 +59,8 @@ app.use('/api/chat', geminiroutes);
 app.use('/api/fda', fdaroutes);
 app.use('/api/fit', googleFitRoutes);
 
-// Server start
+// --- Server ---
 const PORT = process.env.PORT || 6900;
 app.listen(PORT, () => {
-  console.log(`Medimate server connected on port ${PORT}`);
+  console.log(`✅ Medimate server running on port ${PORT}`);
 });
