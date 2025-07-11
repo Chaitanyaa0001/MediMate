@@ -36,7 +36,6 @@ const App = () => {
       <Route path="/signin" element={<Signin />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/fda" element={<FDA />} />
-      <Route path="/auth/google-redirect" element={<GoogleRedirect />} /> {/* ✅ Added */}
 
       {/* Patient Protected Routes */}
       <Route
