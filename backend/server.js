@@ -22,10 +22,9 @@ const app = express();
 
 // --- Middleware ---
 
-// Cookie parser (for auth tokens)
 app.use(cookieParser());
 
-// CORS Setup
+// ✅ CORS setup
 const allowedOrigins = [
   process.env.FRONTEND_URL,
   'https://medi-mate-delta.vercel.app'
@@ -42,10 +41,16 @@ app.use(cors({
   credentials: true,
 }));
 
-// Preflight (OPTIONS) handler
-app.options("*", cors());
+app.options("*", cors()); // Preflight requests
 
-// Body parsers
+// ✅ Set custom security headers (Google login + embedder-friendly)
+app.use((req, res, next) => {
+  res.setHeader("Cross-Origin-Opener-Policy", "same-origin-allow-popups");
+  res.setHeader("Cross-Origin-Embedder-Policy", "unsafe-none");
+  next();
+});
+
+// Body parser
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -59,7 +64,7 @@ app.use('/api/chat', geminiroutes);
 app.use('/api/fda', fdaroutes);
 app.use('/api/fit', googleFitRoutes);
 
-// --- Server ---
+// --- Start Server ---
 const PORT = process.env.PORT || 6900;
 app.listen(PORT, () => {
   console.log(`✅ Medimate server running on port ${PORT}`);
