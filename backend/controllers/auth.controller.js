@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const JWT_SECRET = process.env.JWT_SECRET;
 const generatetoken = require('../utils/generatetoken');
 
+// Signup Controller
 const signup = async (req, res) => {
   const { username, email, password, confirmpassword, role } = req.body;
   try {
@@ -14,9 +15,9 @@ const signup = async (req, res) => {
       return res.status(400).json({ message: "Passwords do not match" });
     }
 
-    const existinguser = await User.findOne({ email, role });
+    const existinguser = await User.findOne({ email, role }); // ✅ Include role
     if (existinguser) {
-      return res.status(400).json({ message: "User already exists" });
+      return res.status(400).json({ message: "User already exists for this role" });
     }
 
     const salt = await bcrypt.genSalt(10);
@@ -40,13 +41,14 @@ const signup = async (req, res) => {
       path: '/'
     });
 
-    return res.status(201).json(newuser);
+    return res.status(201).json({ user: newuser, token });
   } catch (error) {
     console.log("Signup failed:", error);
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
+// Signin Controller
 const signin = async (req, res) => {
   const { email, password, role } = req.body;
   try {
@@ -54,20 +56,14 @@ const signin = async (req, res) => {
       return res.status(400).json({ message: "All fields are required" });
     }
 
-    const existinguser = await User.findOne({ email });
+    const existinguser = await User.findOne({ email, role }); // ✅ FIXED
     if (!existinguser) {
-      return res.status(404).json({ message: "User does not exist" });
-    }
-
-    if (existinguser.role !== role) {
-      return res.status(403).json({
-        message: `This email is registered as a ${existinguser.role}. Please select the correct role.`,
-      });
+      return res.status(404).json({ message: "User does not exist for this role" });
     }
 
     if (existinguser.authType !== 'manual') {
       return res.status(403).json({
-        message: `This account was created using Google. Please sign in with Google.`,
+        message: `This ${role} account was created using Google. Please sign in with Google.`,
       });
     }
 
@@ -93,6 +89,7 @@ const signin = async (req, res) => {
   }
 };
 
+// Logout Controller
 const logout = (req, res) => {
   try {
     res.clearCookie("token", {
@@ -108,34 +105,34 @@ const logout = (req, res) => {
   }
 };
 
+// Google Login Controller
 const googleLogin = async (req, res) => {
   try {
-    const { email, username, profilePhoto, role } = req.body;
+    const { email, username, role } = req.body;
 
-    if (!email || !username || !profilePhoto || !role) {
+    if (!email || !username || !role) {
       return res.status(400).json({ message: "Missing Google user info or role" });
     }
 
-    let user = await User.findOne({ email, role });
+    let user = await User.findOne({ email, role }); // ✅ Include role
 
-    if (!user) {
+    if (user) {
+      if (user.authType !== 'google') {
+        return res.status(403).json({
+          message: `This ${role} account was created using another method. Please login with email & password.`,
+        });
+      }
+    } else {
       user = await User.create({
         username,
         email,
         role,
-        profilephoto: profilePhoto,
         authType: 'google',
         password: null
       });
-    } else if (user.authType !== 'google') {
-      return res.status(403).json({
-        message: `This account was created using another method. Please login with email & password.`
-      });
     }
 
-    const token = jwt.sign({ id: user._id }, JWT_SECRET, {
-      expiresIn: '7d'
-    });
+    const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '7d' });
 
     res.cookie('token', token, {
       httpOnly: true,
@@ -145,14 +142,16 @@ const googleLogin = async (req, res) => {
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
-    res.status(200).json({
-      user,
-      token,
-    });
+    res.status(200).json({ user, token });
   } catch (err) {
     console.error('Google Login Error:', err.message);
     res.status(500).json({ message: 'Internal Server Error' });
   }
 };
 
-module.exports = { signup, signin, logout, googleLogin };
+module.exports = {
+  signup,
+  signin,
+  logout,
+  googleLogin
+};

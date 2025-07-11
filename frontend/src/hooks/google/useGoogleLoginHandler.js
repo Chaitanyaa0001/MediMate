@@ -17,7 +17,6 @@ export const useGoogleLoginHandler = (role) => {
       const response = await axios.post(`${BASE_URL}/api/auth/google`, {
         email: decoded.email,
         username: decoded.name,
-        profilePhoto: decoded.picture,
         role, // ✅ sent from selected radio
       }, {
         withCredentials: true
