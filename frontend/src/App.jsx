@@ -25,7 +25,6 @@ import FDA from './pages/fda/FDA';
 // Auth
 import Privateroute from './privateroutes/Privateroute';
 import useAuthBootstrap from './hooks/bootstrap/useAuthBootstrap';
-import GoogleRedirect from './pages/googleredirect/GoogleRedirect'; // ✅ Google login redirect
 
 const App = () => {
   useAuthBootstrap();
