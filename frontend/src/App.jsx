@@ -5,6 +5,7 @@ import { Routes, Route } from 'react-router-dom';
 import Getstarted from './pages/getstarted/Getstarted';
 import Signin from './pages/auth/signin/Signin';
 import Signup from './pages/auth/signup/Signup';
+
 // Patient Pages
 import PatientDashboard from './pages/dashboard/PatientDashboard';
 import BookAppointment from './pages/appoitnments/BookAppointment';
@@ -21,19 +22,22 @@ import Chats from './pages/chats/Chats';
 import Settings from './pages/settings/Settings';
 import FDA from './pages/fda/FDA';
 
-// Auth wrapper
+// Auth
 import Privateroute from './privateroutes/Privateroute';
 import useAuthBootstrap from './hooks/bootstrap/useAuthBootstrap';
-const App = () => {
+import GoogleRedirect from './pages/googleredirect/GoogleRedirect'; // ✅ Google login redirect
 
+const App = () => {
   useAuthBootstrap();
-  
+
   return (
     <Routes>
+      {/* Public Routes */}
       <Route path="/" element={<Getstarted />} />
       <Route path="/signin" element={<Signin />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/fda" element={<FDA />} />
+      <Route path="/auth/google-redirect" element={<GoogleRedirect />} /> {/* ✅ Added */}
 
       {/* Patient Protected Routes */}
       <Route
@@ -95,7 +99,7 @@ const App = () => {
         }
       />
 
-      {/* Common Protected Routes */}
+      {/* Common Authenticated Routes */}
       <Route
         path="/chats"
         element={

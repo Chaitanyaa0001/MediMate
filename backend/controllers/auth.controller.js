@@ -119,12 +119,11 @@ const googleCallback = (req, res, next) => {
       path: "/",
     });
 
-    const dashboard = user.role === 'doctor' ? '/doctor/register' : '/patient/dashboard';
-    console.log("🔁 Redirecting to:", `${process.env.FRONTEND_URL}${dashboard}`);
-
-    return res.redirect(`${process.env.FRONTEND_URL}${dashboard}`);
+    // ✅ Redirect to intermediate client route that refreshes auth state
+    return res.redirect(`${process.env.FRONTEND_URL}/auth/google-redirect`);
   })(req, res, next);
 };
+
 
   
  module.exports  = {signup,signin,logout,  googleLogin,googleCallback}
