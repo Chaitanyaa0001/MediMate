@@ -119,8 +119,9 @@ const googleCallback = (req, res, next) => {
       path: "/",
     });
 
-    // ✅ CORRECT DASHBOARD REDIRECTION
-    const dashboard = user.role === 'doctor' ? '/doctor/dashboard' : '/patient/dashboard';
+    const dashboard = user.role === 'doctor' ? '/doctor/register' : '/patient/dashboard';
+    console.log("🔁 Redirecting to:", `${process.env.FRONTEND_URL}${dashboard}`);
+
     return res.redirect(`${process.env.FRONTEND_URL}${dashboard}`);
   })(req, res, next);
 };

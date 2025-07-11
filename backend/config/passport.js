@@ -11,25 +11,28 @@ passport.use(new GoogleStrategy(
   },
   async (req, accessToken, refreshToken, profile, done) => {
     try {
-      // ✅ Get role from 'state' parameter sent during the first request
-      const role = req.query.state;
+      // ✅ Get role from `req.query.state` only during the initial call
+      // But in the callback, `state` is passed separately in params (4th argument)
+      const role = req.query?.state || req.session?.oauthState || req.body?.state || req.params?.state;
 
-      if (!role || !['doctor', 'patient'].includes(role)) {
+      // ❗ Or even safer:
+      const callbackUrl = new URL(req.originalUrl, `${req.protocol}://${req.get('host')}`);
+      const roleFromState = callbackUrl.searchParams.get("state");
+
+      if (!roleFromState || !['doctor', 'patient'].includes(roleFromState)) {
         return done(new Error('Invalid or missing role'), null);
       }
 
       const email = profile.emails[0].value;
 
-      // Find existing user by email and role
-      let user = await User.findOne({ email, role });
+      let user = await User.findOne({ email, role: roleFromState });
 
-      // If not found, create a new user
       if (!user) {
         user = await User.create({
           username: profile.displayName,
           email,
-          role,
-          provider: 'google', // 👈 mark user as Google user
+          role: roleFromState,
+          provider: 'google',
         });
       }
 
