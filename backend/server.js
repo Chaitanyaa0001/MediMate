@@ -33,6 +33,7 @@ app.use(cors({
     credentials:true
 }));
 
+
 app.use(passport.initialize());
 
 app.use(express.json());
