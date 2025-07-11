@@ -149,12 +149,15 @@ const Signin = () => {
         </button>
 
         <div className="w-full flex justify-center mt-2">
-<GoogleLogin
-  onSuccess={handleGoogleSuccess}
-  onError={() => setGoogleError('google-failed')}
-  disabled={!logindata.role}
-/>
-        </div>
+  <div className="p-[2px] border border-red-600 rounded-md">
+    <GoogleLogin
+      onSuccess={handleGoogleSuccess}
+      onError={() => setGoogleError('google-failed')}
+      disabled={!logindata.role}
+    />
+  </div>
+</div>
+
 
         <span className="text-sm text-center my-2">
           Don't have an account?{' '}
