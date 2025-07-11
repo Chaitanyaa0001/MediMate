@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const Userschema = new mongoose.Schema({
+const UserSchema = new mongoose.Schema({
   username: {
     type: String,
     required: true,
@@ -12,7 +12,7 @@ const Userschema = new mongoose.Schema({
   password: {
     type: String,
     required: function () {
-      return this.provider !== 'google';
+      return this.authType !== 'google';
     },
   },
   role: {
@@ -20,17 +20,16 @@ const Userschema = new mongoose.Schema({
     required: true,
     enum: ['doctor', 'patient'],
   },
-  provider: {
+  authType: {
     type: String,
-    enum: ['local', 'google'],
-    default: 'local',
+    enum: ['manual', 'google'],
+    default: 'manual',
   },
   profilephoto: {
     type: String,
   },
 }, { timestamps: true });
 
-// Prevent duplicate users with same email + role
-Userschema.index({ email: 1, role: 1 }, { unique: true });
+UserSchema.index({ email: 1, role: 1 }, { unique: true });
 
-module.exports = mongoose.model('User', Userschema);
+module.exports = mongoose.model('User', UserSchema);

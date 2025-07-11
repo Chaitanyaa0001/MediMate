@@ -4,17 +4,12 @@ const {
   signup,
   signin,
   logout,
-  googleLogin,
-  googleCallback
+  googleLogin
 } = require('../controllers/auth.controller');
 
-// 🔐 JWT Auth
 router.post('/signup', signup);
 router.post('/signin', signin);
 router.post('/logout', logout);
-
-// 🌐 Google Auth
-router.get('/google', googleLogin); // requires ?role=doctor or ?role=patient
-router.get('/google/callback', googleCallback);
+router.post('/google', googleLogin);
 
 module.exports = router;

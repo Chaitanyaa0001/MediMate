@@ -1,22 +1,18 @@
 import React, { useState } from 'react';
 import logo from '../../../assets/logo.png';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { usesignin } from '../../../hooks/authhooks/useSignin';
-import useGoogleLogin from '../../../hooks/googlelogin/useGoogleLogin';
 import { useDispatch } from 'react-redux';
 import { setAuth } from '../../../redux/slice';
-
+import { GoogleLogin } from '@react-oauth/google';
+import { jwtDecode } from 'jwt-decode';
+import axios from 'axios';
 
 const Signin = () => {
   const dispatch = useDispatch();
-
   const navigate = useNavigate();
-  const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
-  const googleError = queryParams.get('error');
-
   const { signin, loading, error } = usesignin();
-  const { loginWithGoogle } = useGoogleLogin();
+  const [googleError, setGoogleError] = useState(null);
 
   const [logindata, setlogindata] = useState({
     email: '',
@@ -26,33 +22,58 @@ const Signin = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setlogindata((prev) => ({
-      ...prev,
-      [name]: value
-    }));
+    setlogindata((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const result = await signin(logindata);
-
     if (result) {
-      if (result.message?.includes("User Does not exist")) {
-        setError("This email is not registered with selected role.")
-        return;
-      }
       dispatch(setAuth({
-      user: result.user,
-      role: result.user.role,
-      token: result.token , 
-    }));
-      if (result?.user?.role === 'doctor') {
+        user: result.user,
+        role: result.user.role,
+        token: result.token,
+      }));
+      if (result.user.role === 'doctor') {
         navigate('/doctor/register');
-      } else if (result?.user?.role === 'patient') {
-        navigate('/patient/dashboard');
       } else {
-        navigate('/');
-    }} };
+        navigate('/patient/dashboard');
+      }
+    }
+  };
+
+  const handleGoogleSuccess = async (response) => {
+    if (!logindata.role) {
+      setGoogleError('role-required');
+      return;
+    }
+    try {
+      const decoded = jwtDecode(response.credential);
+      const res = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/auth/google`, {
+        email: decoded.email,
+        username: decoded.name,
+        profilePhoto: decoded.picture,
+        role: logindata.role,
+      }, {
+        withCredentials: true
+      });
+
+      if (res.data) {
+        dispatch(setAuth({
+          user: res.data.user,
+          role: res.data.user.role,
+          token: res.data.token
+        }));
+        if (res.data.user.role === 'doctor') {
+          navigate('/doctor/register');
+        } else {
+          navigate('/patient/dashboard');
+        }
+      }
+    } catch (err) {
+      setGoogleError('google-failed');
+    }
+  };
 
   return (
     <div className='h-screen w-full flex flex-col justify-center items-center '>
@@ -68,7 +89,6 @@ const Signin = () => {
       >
         <h1 className="text-2xl text-red-600 font-bold">Login</h1>
 
-        {/* Error messages */}
         {error && <p className="text-red-600 text-sm">{error}</p>}
         {loading && <p className="text-blue-600 text-sm">Logging in...</p>}
         {googleError && (
@@ -78,29 +98,22 @@ const Signin = () => {
           </p>
         )}
 
-        <div className="w-full">
-          <label className="text-sm text-gray-600">Email</label>
-          <input
-            type="email"
-            name="email"
-            placeholder="Enter your email"
-            value={logindata.email}
-            onChange={handleChange}
-            className="w-full mt-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-
-        <div className="w-full">
-          <label className="text-sm text-gray-600">Password</label>
-          <input
-            type="password"
-            name="password"
-            placeholder="Enter your password"
-            value={logindata.password}
-            onChange={handleChange}
-            className="w-full mt-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
+        <input
+          type="email"
+          name="email"
+          placeholder="Enter your email"
+          value={logindata.email}
+          onChange={handleChange}
+          className="w-full mt-1 px-4 py-2 border border-gray-300 rounded-md"
+        />
+        <input
+          type="password"
+          name="password"
+          placeholder="Enter your password"
+          value={logindata.password}
+          onChange={handleChange}
+          className="w-full mt-1 px-4 py-2 border border-gray-300 rounded-md"
+        />
 
         <div className="w-full">
           <label className="text-sm text-gray-600">Login as</label>
@@ -135,13 +148,13 @@ const Signin = () => {
           Login
         </button>
 
-        <button
-          type="button"
-          onClick={() => loginWithGoogle(logindata.role)}
-          className="w-full bg-red-600 text-white py-2 mt-2 rounded-md hover:bg-red-700 transition"
-        >
-          Sign in with Google
-        </button>
+        <div className="w-full flex justify-center mt-2">
+<GoogleLogin
+  onSuccess={handleGoogleSuccess}
+  onError={() => setGoogleError('google-failed')}
+  disabled={!logindata.role}
+/>
+        </div>
 
         <span className="text-sm text-center my-2">
           Don't have an account?{' '}

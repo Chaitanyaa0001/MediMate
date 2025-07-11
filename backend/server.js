@@ -13,8 +13,7 @@ const fdaroutes = require('./routes/fda.route');
 const googleFitRoutes = require('./routes/googlefit.route');
 
 
-const passport = require('passport');
-require('./config/passport');
+
 
 const connectDB = require('./config/database');
 const cookieParser = require('cookie-parser');
@@ -34,7 +33,6 @@ app.use(cors({
 }));
 
 
-app.use(passport.initialize());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); // Optional: if using URL-encoded forms

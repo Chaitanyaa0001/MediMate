@@ -27,7 +27,7 @@ const Googlefitdata = () => {
 
         setFitData({ heartRate, bloodPressure, oxygenLevel });
 
-        // Show toast if any value is missing
+  
         if (
           heartRate === 'N/A' ||
           bloodPressure === 'N/A' ||
