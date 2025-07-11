@@ -12,7 +12,7 @@ export const uselogout = () => {
 
   const logout = async () => {
     try {
-      await axios.get(`${BASE_URL}/api/auth/logout`, {
+      await axios.post(`${BASE_URL}/api/auth/logout`, {
         withCredentials: true,
       });
 
