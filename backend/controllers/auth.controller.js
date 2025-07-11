@@ -88,17 +88,21 @@ const  logout = (req,res) =>{
 }
 
 const googleLogin = (req, res, next) => {
-    const { role } = req.query;
+  const { state } = req.query;  
+  console.log("🌐 Google Login Triggered with state (role):", state);
 
-      if (!role || (role !== 'patient' && role !== 'doctor')) {
-        return res.redirect(`${process.env.FRONTEND_URL}/signin?error=role-required`);
-      }
-        passport.authenticate('google', {
-          scope: ['profile', 'email'],
-          session: false,
-          state: role, 
-        })(req, res, next);
-    };
+  if (!state || (state !== 'patient' && state !== 'doctor')) {
+    console.error("❌ Invalid state received in Google Login");
+    return res.redirect(`${process.env.FRONTEND_URL}/signin?error=role-required`);
+  }
+
+  passport.authenticate('google', {
+    scope: ['profile', 'email'],
+    session: false,
+    state, // send state to Google
+  })(req, res, next);
+};
+
 
 const googleCallback = (req, res, next) => {
   passport.authenticate('google', { session: false }, (err, user) => {
@@ -106,6 +110,7 @@ const googleCallback = (req, res, next) => {
       console.error('Google Auth Error:', err);
       return res.redirect(`${process.env.FRONTEND_URL}/signin?error=google-failed`);
     }
+
     const token = generatetoken(user._id, user.role);
     res.cookie("token", token, {
       httpOnly: true,
@@ -113,10 +118,12 @@ const googleCallback = (req, res, next) => {
       sameSite: "None",
       path: "/",
     });
-    const dashboard = user.role === 'doctor' ? '/doctor/dashboard' : '/patient/dashboard';
 
-    res.redirect(`${process.env.FRONTEND_URL}${dashboard}`);
+    // ✅ CORRECT DASHBOARD REDIRECTION
+    const dashboard = user.role === 'doctor' ? '/doctor/dashboard' : '/patient/dashboard';
+    return res.redirect(`${process.env.FRONTEND_URL}${dashboard}`);
   })(req, res, next);
 };
+
   
  module.exports  = {signup,signin,logout,  googleLogin,googleCallback}
