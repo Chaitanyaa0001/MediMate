@@ -14,7 +14,7 @@ const Signup = () => {
     email: '',
     password: '',
     confirmPassword: '',
-    role: 'patient' // default selection
+    role: 'patient' 
   });
 
   const handleChange = (e) => {
@@ -41,15 +41,15 @@ const Signup = () => {
     <div className='h-screen w-full flex flex-col justify-center items-center'>
       <div className='flex flex-col justify-center items-center gap-1 mb-2'>
         <img src={logo} alt="logo" className='w-[70px] sm:w-[100px] lg:w-[150px]' />
-        <h1 className='text-3xl text-red-600 mb-2 lg:text-4xl'>Join MediMate</h1>
+        <h1 className='text-xl text-red-600 mb-2 lg:text-4xl'>Join MediMate</h1>
         <h2 className='text-xl opacity-55'>Create your free account</h2>
       </div>
 
       <form
         onSubmit={handleSubmit}
-        className="flex flex-col bg-gray-100 justify-between w-[70%] m-3 h-fit sm:w-[50%] lg:w-[30%] p-5 rounded-[8px] shadow-lg shadow-black gap-4"
+        className="flex flex-col bg-gray-100 justify-between w-[90%]  h-fit sm:w-[60%] lg:w-[30%] p-5 rounded-[8px] shadow-lg shadow-black "
       >
-        <h1 className="text-2xl text-red-600 font-bold">Sign Up</h1>
+        <h1 className="text-xl text-red-600 font-bold">Sign Up</h1>
 
         <div className="w-full">
           <label className="text-sm text-gray-600">Username</label>

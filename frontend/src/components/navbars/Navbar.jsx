@@ -45,16 +45,22 @@ const Navbar = () => {
       </div>
 
       {/* Mobile Menu (only when menuopen is true) */}
-      {menuopen && (
-        <div className="sm:hidden flex flex-col items-center gap-2 bg-white py-4 px-6 absolute top-full left-0 w-full shadow-md z-50">
-          <button className="text-blue-700 w-full text-left px-4 py-2 rounded-[5px] hover:bg-blue-50">
-            Signup
-          </button>
-          <button className="bg-red-700 text-white w-full text-left px-4 py-2 rounded-[5px] hover:bg-red-600">
-            Signin
-          </button>
-        </div>
-      )}
+        {menuopen && (
+          <div className="sm:hidden flex flex-col items-center gap-2 bg-white py-4 px-6 absolute top-full left-0 w-full shadow-md z-50">
+            <Link to="/signup" className="w-full" onClick={() => setmenuopen(false)}>
+              <button className="text-blue-700 w-full text-left px-4 py-2 rounded-[5px] hover:bg-blue-50">
+                Signup
+              </button>
+            </Link>
+            <Link to="/signin" className="w-full" onClick={() => setmenuopen(false)}>
+              <button className="bg-red-700 text-white w-full text-left px-4 py-2 rounded-[5px] hover:bg-red-600">
+                Signin
+              </button>
+            </Link>
+          </div>
+        )}
+
+
     </div>
   );
 };

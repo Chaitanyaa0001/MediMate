@@ -1,6 +1,7 @@
 import React from 'react';
 import { FiHeart } from 'react-icons/fi';
 import logo from '../../assets/logo.png';
+import { Link } from 'react-router-dom'; 
 import { GiArtificialIntelligence } from 'react-icons/gi';
 import { FaRegNewspaper } from 'react-icons/fa';
 import { MdIntegrationInstructions,MdDashboard} from 'react-icons/md';
@@ -63,12 +64,17 @@ const Getstarted = () => {
           medical information – all in one secure platform.
         </p>
         <div className="flex flex-col gap-4 sm:flex-row lg:flex-row">
-          <button className="bg-red-600 w text-white px-5 py-2 rounded flex items-center gap-2 ">
-            <FiHeart className="text-white" /> Get Started Free
-          </button>
-          <button className="border border-blue-600 text-blue-600 px-5 py-2 rounded">
-            Sign In
-          </button>
+          <Link to="/signin">
+            <button className="bg-red-600 text-white px-5 py-2 cursor-pointer rounded flex items-center gap-2">
+              <FiHeart className="text-white" />
+              Get Started Free
+            </button>
+          </Link>
+          <Link to="/signin">
+           <button className="border border-blue-600 text-blue-600 px-5 py-2 w-[100%] cursor-pointer rounded">
+             Sign In
+           </button>
+          </Link>
         </div>
         <div className='my-18 p-4'>
           <h1 className='text-3xl font-bold text-red-500 mb-3 sm:text-4xl lg:text-4xl'>Comprehensive Health Management</h1>
