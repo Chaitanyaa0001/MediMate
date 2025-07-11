@@ -1,3 +1,4 @@
+// ✅ FIXED BookAppointment.jsx
 import React, { useState, useEffect } from 'react';
 import DashNavbar from '../../components/navbars/DashNavbar';
 import { FiSearch } from 'react-icons/fi';
@@ -48,22 +49,18 @@ const BookAppointment = () => {
     e.preventDefault();
 
     if (!selectedDoctor || !selectedDoctor.userId) {
-      console.error("Doctor or doctor.userId is missing", selectedDoctor);
+      alert("Doctor selection failed. Try again.");
       return;
     }
-
-    console.log("Booking appointment with doctorId:", selectedDoctor.userId);
 
     try {
       const res = await bookdoctor({
         ...appointmentForm,
-        doctorId: selectedDoctor.userId, // ✅ Correct userId
+        doctorId: selectedDoctor.userId,
       });
-
-      if (res) {
-        console.log("Booking successful:", res);
-      }
+      alert("Appointment booked successfully!");
     } catch (error) {
+      alert("Booking failed. Check your login or try again.");
       console.error("Booking failed:", error);
     }
 
@@ -86,7 +83,7 @@ const BookAppointment = () => {
           Search and book appointments with trusted doctors
         </p>
 
-        <div className='bg-white flex py-1 justify-center items-center rounded-[6px] shadow-md shadow-gray-400 border-2 border-red-600'>
+        <div className='bg-white flex py-1 justify-center items-center rounded-[6px] shadow-md border-2 border-red-600'>
           <FiSearch className='w-10 text-xl text-gray-500' />
           <input
             type='text'
@@ -105,10 +102,7 @@ const BookAppointment = () => {
               const shouldClamp = doctor.biography?.length > 150;
 
               return (
-                <div
-                  key={id}
-                  className='border-2 border-red-600 rounded-lg p-4 bg-white shadow-md w-full lg:w-[45%] flex flex-col'
-                >
+                <div key={id} className='border-2 border-red-600 rounded-lg p-4 bg-white shadow-md w-full lg:w-[45%]'>
                   <h3 className='text-xl font-semibold text-red-700 sm:text-2xl lg:text-3xl'>
                     {doctor.firstname} {doctor.lastname}
                   </h3>
@@ -130,10 +124,7 @@ const BookAppointment = () => {
                     {doctor.biography}
                   </p>
                   {shouldClamp && (
-                    <button
-                      onClick={() => toggleExpand(id)}
-                      className='text-blue-600 mt-1 hover:underline'
-                    >
+                    <button onClick={() => toggleExpand(id)} className='text-blue-600 mt-1 hover:underline'>
                       {isExpanded ? 'Read less' : 'Read more'}
                     </button>
                   )}
@@ -142,7 +133,7 @@ const BookAppointment = () => {
                     className='mt-3 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition'
                     onClick={() => {
                       if (!doctor.userId) {
-                        console.error("No userId found in doctor object:", doctor);
+                        alert("This doctor is not properly registered.");
                         return;
                       }
                       setSelectedDoctor(doctor);
